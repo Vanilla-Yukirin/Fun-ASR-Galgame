@@ -43,6 +43,8 @@ def main_hydra(cfg: DictConfig):
     if output_dir and not os.path.exists(output_dir):
         os.makedirs(output_dir, exist_ok=True)
 
+    prompt = kwargs.get("prompt", None)
+
     with open(scp_file, "r", encoding="utf-8") as f1:
         with open(output_file, "w", encoding="utf-8") as f2:
             for line in f1:
@@ -51,7 +53,17 @@ def main_hydra(cfg: DictConfig):
                     continue
                 parts = line.split(maxsplit=1)
                 if len(parts) == 2:
-                    text = model.generate(input=[parts[1]], cache={}, batch_size=1)[0]["text"]
+                    if prompt:
+                        res = model.generate(input=[parts[1]], cache={}, batch_size=1, prompt=prompt)
+                    else:
+                        res = model.generate(input=[parts[1]], cache={}, batch_size=1)
+                    
+                    if res:
+                        text = res[0]["text"]
+                    else:
+                        print(f"Warning: Empty result for {parts[0]}")
+                        text = ""
+                        
                     f2.write(f"{parts[0]}\t{text}\n")
 
 
