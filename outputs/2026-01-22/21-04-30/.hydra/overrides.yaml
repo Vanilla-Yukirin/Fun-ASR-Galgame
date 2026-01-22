@@ -1,0 +1,4 @@
+- ++scp_file=R:\\datasets--litagin--Galgame_Speech_ASR_16kHz\\train_wav.scp
+- ++transcript_file=R:\\datasets--litagin--Galgame_Speech_ASR_16kHz\\train_text.txt
+- ++jsonl_file=R:\\datasets--litagin--Galgame_Speech_ASR_16kHz\\train_example.jsonl
+- ++limit=1000

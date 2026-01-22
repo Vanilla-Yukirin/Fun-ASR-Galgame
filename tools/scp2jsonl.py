@@ -106,7 +106,7 @@ def main_hydra(cfg: DictConfig):
 
     with tqdm(total=len(data_pairs), desc="Processing") as pbar:
         with ThreadPoolExecutor(max_workers=max_workers) as executor:
-            with open(jsonl_file, "w") as f_out:
+            with open(jsonl_file, "w", encoding="utf-8") as f_out:  # Add encoding="utf-8"
                 futures = {
                     executor.submit(processor.process_line, pair): i
                     for i, pair in enumerate(data_pairs)
