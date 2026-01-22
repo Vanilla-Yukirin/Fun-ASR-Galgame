@@ -14,8 +14,9 @@ from omegaconf import DictConfig, OmegaConf, ListConfig
 
 
 class LineProcessor:
-    def __init__(self, tokenizer):
+    def __init__(self, tokenizer, prompt="语音转写："):
         self.tokenizer = tokenizer
+        self.prompt = prompt
         self.lock = threading.Lock()
 
     def process_line(self, line_pair: Tuple[str, str]) -> Optional[Dict]:
@@ -52,7 +53,7 @@ class LineProcessor:
                     {"role": "system", "content": "You are a helpful assistant."},
                     {
                         "role": "user",
-                        "content": f"语音转写：<|startofspeech|>!{wav_path}<|endofspeech|>",
+                        "content": f"{self.prompt}<|startofspeech|>!{wav_path}<|endofspeech|>",
                     },
                     {"role": "assistant", "content": text},
                 ],
@@ -80,6 +81,7 @@ def main_hydra(cfg: DictConfig):
     max_workers = kwargs.get("max_workers", os.cpu_count())
     jsonl_file = kwargs["jsonl_file"]
     limit = kwargs.get("limit", None)  # Add limit parameter
+    prompt = kwargs.get("prompt", "语音转写：")
 
     with open(scp_file, "r", encoding="utf-8") as f1, open(transcript_file, "r", encoding="utf-8") as f2:
         scp_lines = f1.readlines()
@@ -96,7 +98,7 @@ def main_hydra(cfg: DictConfig):
         )
 
     tokenizer = AutoTokenizer.from_pretrained("Qwen/Qwen3-0.6B")
-    processor = LineProcessor(tokenizer)
+    processor = LineProcessor(tokenizer, prompt=prompt)
 
     data_pairs = list(zip(scp_lines, transcript_lines))
 
