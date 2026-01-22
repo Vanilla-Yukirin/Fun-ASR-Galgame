@@ -57,7 +57,7 @@ def safe_ja_g2p(text, kana=True, max_length=100):
 
 
 def normalize_text(srcfn, dstfn, kana=False):
-    with open(srcfn, "r") as f_read, open(dstfn, "w") as f_write:
+    with open(srcfn, "r", encoding="utf-8") as f_read, open(dstfn, "w", encoding="utf-8") as f_write:
         all_lines = f_read.readlines()
         for line in all_lines:
             line = line.strip()
