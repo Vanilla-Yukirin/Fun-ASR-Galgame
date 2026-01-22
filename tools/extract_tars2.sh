@@ -8,8 +8,8 @@
 SOURCE_DIR="/mnt/o/datasets/huggingface/hub/datasets--litagin--Galgame_Speech_ASR_16kHz/data"
 
 # 目标目录（解压到的目录）
-TARGET_DIR="/mnt/r/datasets--litagin--Galgame_Speech_ASR_16kHz/data"
-# TARGET_DIR="/mnt/d/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/data"
+# TARGET_DIR="/mnt/r/datasets--litagin--Galgame_Speech_ASR_16kHz/data"
+TARGET_DIR="/mnt/d/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/data"
 
 # tar文件前缀
 TAR_PREFIX="galgame-speech-asr-16kHz-train-"
