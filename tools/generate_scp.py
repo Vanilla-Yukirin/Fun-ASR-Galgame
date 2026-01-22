@@ -96,13 +96,15 @@ def main():
     print(f"  - {WAV_SCP_PATH}")
     print(f"  - {TEXT_TXT_PATH}")
     print("\n现在可以运行以下命令生成JSONL文件:")
-    print(f"python tools/scp2jsonl.py \\")
-    print(f"  ++scp_file={WAV_SCP_PATH} \\")
-    print(f"  ++transcript_file={TEXT_TXT_PATH} \\")
-    print(f"  ++jsonl_file={os.path.join(OUTPUT_DIR, 'train_example.jsonl')}")
+    print(f"python tools/scp2jsonl.py ^")
+    print(f"  \"++scp_file={WAV_SCP_PATH}\" ^")
+    print(f"  \"++transcript_file={TEXT_TXT_PATH}\" ^")
+    print(f"  \"++jsonl_file={os.path.join(OUTPUT_DIR, 'train_example.jsonl')}\" ^")
     print(f"  ++limit=1000")
-    print(f"或者在powershell中，使用：")
-    print(f"python tools/scp2jsonl.py ++scp_file=R:\datasets--litagin--Galgame_Speech_ASR_16kHz\train_wav.scp ++transcript_file=R:\datasets--litagin--Galgame_Speech_ASR_16kHz\train_text.txt ++jsonl_file=R:\datasets--litagin--Galgame_Speech_ASR_16kHz\train_example.jsonl ++limit=1000")
+    print(f"或者 (Windows PowerShell):")
+    # 使用双反斜杠 \\ 来转义反斜杠，或者使用 repr()
+    cmd = f'python tools/scp2jsonl.py "++scp_file={WAV_SCP_PATH}" "++transcript_file={TEXT_TXT_PATH}" "++jsonl_file={os.path.join(OUTPUT_DIR, "train_example.jsonl")}" ++limit=1000'
+    print(cmd.replace("\\", "\\\\"))
 
 if __name__ == "__main__":
     main()
