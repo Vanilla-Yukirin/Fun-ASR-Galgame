@@ -1,0 +1,4 @@
+scp_file: R:\datasets--litagin--Galgame_Speech_ASR_16kHz\val_wav_0_1000.scp
+transcript_file: R:\datasets--litagin--Galgame_Speech_ASR_16kHz\val_text_0_1000.txt
+jsonl_file: R:\datasets--litagin--Galgame_Speech_ASR_16kHz\val_0_1000.jsonl
+prompt: 语音转写成日文：
