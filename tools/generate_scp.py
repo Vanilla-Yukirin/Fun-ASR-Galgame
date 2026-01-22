@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Galgame数据集格式转换工具
+Galgame数据集格式转换工具 (含数据集划分)
 将解压后的音频文件转换为FunASR所需的scp和text格式
+支持 offset/count 选择数据子集
 """
 
 import os
@@ -25,14 +26,14 @@ TEXT_EXTENSION = ".txt"
 # ====== 脚本开始 ======
 
 def process_file_list(file_list, wav_scp_path, text_txt_path):
+    """处理文件列表，生成scp和text文件"""
     success_count = 0
     missing_text_count = 0
     
     with open(wav_scp_path, 'w', encoding='utf-8') as f_wav, \
          open(text_txt_path, 'w', encoding='utf-8') as f_txt:
         
-        for idx, audio_path in enumerate(tqdm(file_list, desc="Processing"), 1):
-                 
+        for audio_path in tqdm(file_list, desc="Processing"):
             file_id = Path(audio_path).stem
             txt_path = audio_path.replace(AUDIO_EXTENSION, TEXT_EXTENSION)
             
@@ -54,6 +55,45 @@ def process_file_list(file_list, wav_scp_path, text_txt_path):
                 
     return success_count, missing_text_count
 
+
+def get_user_input(total_count):
+    """获取用户输入的offset和count"""
+    print(f"\n数据选择 (总计 {total_count} 个文件)")
+    print("=" * 40)
+    
+    # 获取 offset
+    while True:
+        offset_str = input(f"请输入起始位置 offset (0~{total_count-1}, 按Enter默认0): ").strip()
+        if offset_str == "":
+            offset = 0
+            break
+        try:
+            offset = int(offset_str)
+            if 0 <= offset < total_count:
+                break
+            print(f"错误：offset 必须在 0~{total_count-1} 之间")
+        except ValueError:
+            print("错误：请输入有效的整数")
+    
+    remaining = total_count - offset
+    
+    # 获取 count
+    while True:
+        count_str = input(f"请输入处理数量 count (1~{remaining}, 输入0或按Enter表示全部={remaining}): ").strip()
+        if count_str == "" or count_str == "0":
+            count = remaining
+            break
+        try:
+            count = int(count_str)
+            if 1 <= count <= remaining:
+                break
+            print(f"错误：count 必须在 1~{remaining} 之间")
+        except ValueError:
+            print("错误：请输入有效的整数")
+    
+    return offset, count
+
+
 def main():
     print("====== Galgame数据集格式转换工具 (含数据集划分) ======\n")
     
@@ -66,35 +106,54 @@ def main():
     print(f"正在扫描目录: {DATA_DIR}")
     pattern = os.path.join(DATA_DIR, "**", f"*{AUDIO_EXTENSION}")
     audio_files = glob.glob(pattern, recursive=True)
+    audio_files.sort()  # 保证顺序一致
     
-    print(f"找到 {len(audio_files)} 个音频文件\n")
+    total_count = len(audio_files)
+    print(f"找到 {total_count} 个音频文件")
     
-    if len(audio_files) == 0:
+    if total_count == 0:
         print("错误：未找到任何音频文件")
         return
 
-    # 随机打算并划分 8:2
-    print("正在进行随机划分 (80% 训练, 20% 验证)...")
-    random.seed(42) # 固定随机种子，保证可复现
-    random.shuffle(audio_files)
+    # 获取用户输入的 offset 和 count
+    offset, count = get_user_input(total_count)
     
-    split_idx = int(len(audio_files) * 0.8)
-    train_files = audio_files[:split_idx]
-    val_files = audio_files[split_idx:]
+    # 切片选择数据（先选择范围）
+    selected_files = audio_files[offset : offset + count]
+    print(f"\n已选择数据范围: [{offset}, {offset + count}) 共 {len(selected_files)} 个文件")
     
-    print(f"训练集数量: {len(train_files)}")
-    print(f"验证集数量: {len(val_files)}\n")
+    # 询问是否打乱（默认不打乱）
+    shuffle_choice = input("是否打乱选中的数据? (y/N, 按Enter默认不打乱): ").strip().lower()
+    if shuffle_choice == 'y':
+        print("正在打乱选中数据...")
+        random.seed(42)  # 固定种子保证可复现
+        random.shuffle(selected_files)
+        shuffle_tag = "_shuffled"
+    else:
+        print("保持原始顺序")
+        shuffle_tag = ""
+    
+    # 8:2 划分训练集和验证集
+    split_idx = int(len(selected_files) * 0.8)
+    train_files = selected_files[:split_idx]
+    val_files = selected_files[split_idx:]
+    
+    print(f"\n训练集数量: {len(train_files)} (80%)")
+    print(f"验证集数量: {len(val_files)} (20%)")
+    
+    # 生成带范围标识的文件名
+    range_tag = f"{offset}_{offset + count}{shuffle_tag}"
     
     # Process Train
-    print("生成训练集列表...")
-    train_wav_scp = os.path.join(OUTPUT_DIR, "train_wav.scp")
-    train_text_txt = os.path.join(OUTPUT_DIR, "train_text.txt")
+    print("\n生成训练集列表...")
+    train_wav_scp = os.path.join(OUTPUT_DIR, f"train_wav_{range_tag}.scp")
+    train_text_txt = os.path.join(OUTPUT_DIR, f"train_text_{range_tag}.txt")
     t_suc, t_miss = process_file_list(train_files, train_wav_scp, train_text_txt)
     
     # Process Val
     print("\n生成验证集列表...")
-    val_wav_scp = os.path.join(OUTPUT_DIR, "val_wav.scp")
-    val_text_txt = os.path.join(OUTPUT_DIR, "val_text.txt")
+    val_wav_scp = os.path.join(OUTPUT_DIR, f"val_wav_{range_tag}.scp")
+    val_text_txt = os.path.join(OUTPUT_DIR, f"val_text_{range_tag}.txt")
     v_suc, v_miss = process_file_list(val_files, val_wav_scp, val_text_txt)
     
     print("\n====== 转换完成 ======")
@@ -102,14 +161,24 @@ def main():
     print(f"验证集: 成功 {v_suc}, 缺失 {v_miss}")
     
     print(f"\n输出文件位于: {OUTPUT_DIR}")
-    print("\n下一步操作建议 (PowerShell):")
-    print("# 1. 生成训练集 JSONL (日文Prompt)")
-    cmd_train = f'python tools/scp2jsonl.py "++scp_file={train_wav_scp}" "++transcript_file={train_text_txt}" "++jsonl_file={os.path.join(OUTPUT_DIR, "train_example.jsonl")}" "++prompt=语音转写成日文："'
+    print(f"文件范围标识: {range_tag}")
+    
+    # 生成下一步命令
+    train_jsonl = os.path.join(OUTPUT_DIR, f"train_{range_tag}.jsonl")
+    val_jsonl = os.path.join(OUTPUT_DIR, f"val_{range_tag}.jsonl")
+    
+    print("\n" + "=" * 50)
+    print("下一步操作建议 (PowerShell):")
+    print("=" * 50)
+    
+    print("\n# 1. 生成训练集 JSONL (日文Prompt)")
+    cmd_train = f'python tools/scp2jsonl.py "++scp_file={train_wav_scp}" "++transcript_file={train_text_txt}" "++jsonl_file={train_jsonl}" "++prompt=\'语音转写成日文：\'"'
     print(cmd_train.replace("\\", "\\\\"))
     
     print("\n# 2. 生成验证集 JSONL (日文Prompt)")
-    cmd_val = f'python tools/scp2jsonl.py "++scp_file={val_wav_scp}" "++transcript_file={val_text_txt}" "++jsonl_file={os.path.join(OUTPUT_DIR, "val_example.jsonl")}" "++prompt=语音转写成日文："'
+    cmd_val = f'python tools/scp2jsonl.py "++scp_file={val_wav_scp}" "++transcript_file={val_text_txt}" "++jsonl_file={val_jsonl}" "++prompt=\'语音转写成日文：\'"'
     print(cmd_val.replace("\\", "\\\\"))
+
 
 if __name__ == "__main__":
     main()
