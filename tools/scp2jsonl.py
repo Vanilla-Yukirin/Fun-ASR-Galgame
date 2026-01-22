@@ -79,10 +79,16 @@ def main_hydra(cfg: DictConfig):
     transcript_file = kwargs["transcript_file"]
     max_workers = kwargs.get("max_workers", os.cpu_count())
     jsonl_file = kwargs["jsonl_file"]
+    limit = kwargs.get("limit", None)  # Add limit parameter
 
-    with open(scp_file, "r") as f1, open(transcript_file, "r") as f2:
+    with open(scp_file, "r", encoding="utf-8") as f1, open(transcript_file, "r", encoding="utf-8") as f2:
         scp_lines = f1.readlines()
         transcript_lines = f2.readlines()
+
+    if limit is not None:
+        scp_lines = scp_lines[:int(limit)]
+        transcript_lines = transcript_lines[:int(limit)]
+        print(f"Limiting processing to first {limit} lines.")
 
     if len(scp_lines) != len(transcript_lines):
         print(
