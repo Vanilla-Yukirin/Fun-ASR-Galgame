@@ -38,7 +38,7 @@ echo "Model: ${model_dir}"
 echo "Train Data: ${train_data}"
 
 # 7. 训练参数
-batch_size=6000
+batch_size=4000
 lr=0.0002
 max_epoch=5
 
