@@ -1,0 +1,319 @@
+## 数据集下载
+
+huggingface-cli download   --repo-type dataset   litagin/Galgame_Speech_ASR_16kHz   --local-dir /mnt/o/datasets/huggingface/hub/datasets--litagin--Galgame_Speech_ASR_16kHz   --local-dir-use-symlinks False --resume-download
+
+
+## 生成txt和scp，转jsonl
+
+python tools/generate_scp.py
+
+后续看指令
+
+## 训练
+
+.\finetine_0_1000.ps1
+
+
+## 解码
+
+
+python decode.py ++model_dir="R:\datasets--litagin--Galgame_Speech_ASR_16kHz\outputs_0_1000" ++scp_file="R:\datasets--litagin--Galgame_Speech_ASR_16kHz\val_wav_0_1000.scp" ++output_file="R:\datasets--litagin--Galgame_Speech_ASR_16kHz\wtPrompt_0_1000.txt" "++prompt='语音转写成日文：'"
+python decode.py ++model_dir="R:\datasets--litagin--Galgame_Speech_ASR_16kHz\outputs_0_1000" ++scp_file="R:\datasets--litagin--Galgame_Speech_ASR_16kHz\val_wav_0_1000.scp" ++output_file="R:\datasets--litagin--Galgame_Speech_ASR_16kHz\woPrompt_0_1000.txt"
+
+原版解码
+python decode.py ++scp_file="R:\datasets--litagin--Galgame_Speech_ASR_16kHz\val_wav_0_1000.scp" ++output_file="R:\datasets--litagin--Galgame_Speech_ASR_16kHz\origin_0_1000.txt"
+
+## 归一化
+
+python tools/whisper_mix_normalize.py "R:\datasets--litagin--Galgame_Speech_ASR_16kHz\wtPrompt_0_1000.txt" "R:\datasets--litagin--Galgame_Speech_ASR_16kHz\wtPrompt_norm_0_1000.txt"
+python tools/whisper_mix_normalize.py "R:\datasets--litagin--Galgame_Speech_ASR_16kHz\woPrompt_0_1000.txt" "R:\datasets--litagin--Galgame_Speech_ASR_16kHz\woPrompt_norm_0_1000.txt"
+
+原版归一化
+python tools/whisper_mix_normalize.py "R:\datasets--litagin--Galgame_Speech_ASR_16kHz\origin_0_1000.txt" "R:\datasets--litagin--Galgame_Speech_ASR_16kHz\origin_norm_0_1000.txt"
+
+val也要归一化
+python tools/whisper_mix_normalize.py "R:\datasets--litagin--Galgame_Speech_ASR_16kHz\val_text_0_1000.txt" "R:\datasets--litagin--Galgame_Speech_ASR_16kHz\text_norm_0_1000.txt"
+
+# cer
+
+compute-wer "R:\datasets--litagin--Galgame_Speech_ASR_16kHz\val_norm_0_1000.txt" "R:\datasets--litagin--Galgame_Speech_ASR_16kHz\wtPrompt_norm_0_1000.txt" cer_wtPrompt_0_1000.txt
+tail -n 8 cer_wtPrompt_0_1000.txt
+
+compute-wer "R:\datasets--litagin--Galgame_Speech_ASR_16kHz\val_norm_0_1000.txt" "R:\datasets--litagin--Galgame_Speech_ASR_16kHz\woPrompt_norm_0_1000.txt" cer_woPrompt_0_1000.txt
+tail -n 8 cer_woPrompt_0_1000.txt
+
+compute-wer "R:\datasets--litagin--Galgame_Speech_ASR_16kHz\val_norm_0_1000.txt" "R:\datasets--litagin--Galgame_Speech_ASR_16kHz\origin_norm_0_1000.txt" cer_origin_0_1000.txt
+tail -n 8 cer_origin_0_1000.txt
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# caps
+
+https://huggingface.co/csukuangfj/sherpa-onnx-funasr-nano-int8-2025-12-30
+
+https://github.com/Wasser1462/FunASR-nano-onnx/blob/main/README.md
+
+https://github.com/HaujetZhao/CapsWriter-Offline/issues/227
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---
+
+
+## 开始wsl
+
+##  全量数据集，转jsonl
+
+# 1. 生成训练集 JSONL (日文Prompt)
+python tools/scp2jsonl.py "++scp_file=/mnt/d/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/train_wav_0_3746131.scp" "++transcript_file=/mnt/d/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/train_text_0_3746131.txt" "++jsonl_file=/mnt/d/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/train_0_3746131.jsonl" "++prompt='语音转写成日文：'"
+
+# 2. 生成验证集 JSONL (日文Prompt)
+python tools/scp2jsonl.py "++scp_file=/mnt/d/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/val_wav_0_3746131.scp" "++transcript_file=/mnt/d/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/val_text_0_3746131.txt" "++jsonl_file=/mnt/d/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/val_0_3746131.jsonl" "++prompt='语音转写成日文：'"
+
+## 额外搞一个小数据集，不然val不出来？不知道到底是什么时候val啊
+
+tail -n 1000 /mnt/d/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/val_wav_0_3746131.scp > /mnt/d/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/val_wav_0_3746131_tail1000.scp
+tail -n 1000 /mnt/d/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/val_text_0_3746131.txt > /mnt/d/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/tail1000.txt
+python tools/scp2jsonl.py "++scp_file=/mnt/d/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/tail1000.scp" "++transcript_file=/mnt/d/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/tail1000.txt" "++jsonl_file=/mnt/d/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/tail1000.jsonl" "++prompt='语音转写成日文：'"
+
+
+## 训练
+
+bash finetine_all.sh
+
+
+
+
+
+
+这是一个很专业的问题。让我们基于您的日志（Model Structure）来精确拆解和估算。
+
+1. 模型参数拆解
+根据日志 Total Number of model parameters: 868.86 M，您的模型构成如下：
+
+Audio Encoder (SenseVoiceEncoderSmall):
+这是"耳朵"，负责把声音转成特征。
+结构复杂（50层 Transformer encoder），参数量占比很大，大约在 500M 左右。
+LLM (Qwen3-0.6B):
+这是"大脑"，负责理解和生成。
+虽然名字叫 0.6B，但这里其实应该是剪枝或量化版，或者部分共享，实际参数大约 300M+。
+Adaptor (Transformer):
+这是"连接桥"，只有几层简单的 Linear 和 Attention。
+日志显示 trainable parameters: 51.67 M (5.9%)，这就是 Adaptor 的大小，只有 50M。
+2. 显存估算：目前 vs. 全量解冻
+训练显存主要由三部分组成：模型权重 + 优化器状态(Optimizer States) + 激活值(Activations)。
+
+模型权重：FP32 下，1B 参数约占 4GB。
+优化器状态：AdamW 优化器通常需要维护 Momentum 和 Variance，FP32 下约占权重的 2~3 倍。
+激活值：这就和 Batch Size 以及 模型层数 强相关了。这是大头。
+A. 第一阶段（当前）：只训练 Adaptor (50M)
+权重 + 优化器：
+冻结部分（Encoder+LLM ≈ 800M）：只需要存权重，不存梯度和优化器状态。约 3.2GB。
+训练部分（Adaptor ≈ 50M）：权重 + 梯度 + 优化器。约 0.2GB + 0.6GB ≈ 0.8GB。
+基底占用：约 4GB。
+激活值：
+因为 Encoder 和 LLM 被冻结，PyTorch 可以选择不存中间激活值（checkpointing），或者只存少量。
+但您跑起来占了约 5.5GB (Peak)，说明 Batch Size=4000 带来的激活值开销大约是 1.5GB 左右。
+B. 第二阶段：解冻 Encoder (+500M)
+变化：Encoder 的 50 层 Transformer 不再只是旁观者，它也要记梯度、记优化器状态、最重要的是记中间激活值以便反向传播。
+优化器增量：Encoder 500M 参数解冻 -> 优化器状态增加约 6GB (FP32)。
+激活值增量 (重点)：
+Encoder 层数很深（50层），反向传播需要存储每一层的输出。
+这部分开销非常大，通常是静态权重的数倍。
+粗略估算：Batch Size=4000 时，激活值可能从 1.5GB 暴涨到 10GB+。
+总估算：
+基底（权重+优化器）：约 10~12 GB。
+激活值（Batch=4000）：约 10~15 GB。
+总需求：20GB ~ 25GB。
+C. 第三阶段：解冻 Encoder + LLM (全量 850M)
+变化：再加 300M 参数进入训练。
+优化器增量：再加约 4GB。
+激活值增量：LLM 层数也不少，激活值再加 5GB+。
+总需求：30GB+。
+3. "20倍论" 是怎么回事？
+您听说的“参数量20倍”是一个经验法则，适用于 全量参数微调 (Full Fine-tuning) 且 Batch Size 较大 的情况。
+
+0.8B * 20 ≈ 16GB。
+这其实和我们上面估算的（解冻 Encoder 约 20GB）是吻合的。如果只微调一部分，当然用不到 20 倍。
+4. 租卡建议
+鉴于您之后想解冻 Encoder（为了“听懂行话”，这步很关键），显存需求会从现在的 5G 飙升。
+
+24GB 显存 (如 RTX 3090 / 4090)
+当前 (只Adaptor): 极其轻松，Batch Size 可以拉到 16000。
+解冻 Encoder: 勉强能跑。可能需要把 Batch Size 降到 2000~3000，或者开启 gradient_checkpointing（一种用时间换显存的技术）。刚好卡在边缘。
+解冻 全量: 可能需要降 Batch Size 到 1000 甚至更低，或者必须用 DeepSpeed Zero2/3。
+40GB/48GB 显存 (如 A100-40G / RTX 6000 Ada)
+完美甜点位。
+即使全量微调，也能保持不错的 Batch Size (4000+)，训练速度快，不用折腾各种节省显存的黑科技。
+80GB+ 显存 (如 A100-80G / H100)
+土豪随意。那个日本博主用 H100 是因为他用的 Whisper-large (1.5B)，比您的模型大一倍，且可能是全量微调，所以必须用大卡。
+最终建议：
+
+高性价比：租 RTX 4090 (24G) x 2 或者 x 1。如果您能接受第二阶段稍微降点 Batch Size，4090 性价比最高。
+省心：租 A6000 (48G) 或 A100 (40G)。完全不用担心 OOM（爆显存），全量微调也能随便跑。
+Good
+Bad
+Review Changes
+
+
+
+Add context
+Images
+Mentions
+Workflows
+
+Conversation mode
+Planning
+Agent can plan before executing tasks. Use for deep research, complex tasks, or collaborative work
+Fast
+Agent will execute tasks directly. Use for simple tasks that can be completed faster
+
+Gemini 3 Pro (High)
+
+Model
+
+
+
+
+
+
+
+
+
+这是非常关键的决策。
+
+1. 模型规模对比
+Whsiper-large-v3: 约 1.5B 参数。
+FunASR-Nano-2512 (您正在用的): 它是 0.8B (800M) 参数。
+纠正：您现在用的 FunASR 其实比 Whisper-large 小一半，这也是为什么它叫 "Nano" 且速度更快。
+2. 您的数据量
+370 万条语音，约 5000+ 小时 (Galgame 语音通常短，按平均 5-6秒算)。
+这属于 中等偏大规模 数据集。
+3. 微调策略建议
+根据官方文档和经验，您的 5000 小时数据正好卡在分界线上。
+
+当前脚本配置：
+bash
+++audio_encoder_conf.freeze=true   # 冻结 Encoder (听力部分)
+++audio_adaptor_conf.freeze=false  # 微调 Adaptor (连接层)
+++llm_conf.freeze=true             # 冻结 LLM (理解和生成部分)
+您目前只微调了 "Adaptor"（大概只占总参数的 1%~5%）。这是最保守、最快、显存最省的方案，但对于 5000 小时的数据来说，这有点“浪费”了。您的数据量足以支撑更深度的学习。
+别人的方案 (Whisper)：
+"先冻结 Encoder 训练 Decoder，然后解冻 Encoder 全量训练。"
+
+这是一种非常经典的 Curriculum Learning (渐进式学习) 策略。
+我的建议 (针对 FunASR)： 鉴于您有 5000 小时数据，且想要好的效果（“听懂行话”），强烈建议解冻 Encoder。因为 Galgame 的音频特征（背景音乐、夸张语调、日式特殊发音）和通用模型训练的数据差别很大，如果不微调 Encoder，模型可能听不清这些特征。 推荐方案：两阶段微调 (Two-Stage Finetuning)
+阶段一 (快速适配)：
+配置：保持现状 (只微调 Adaptor, 甚至可以微调 LLM)。
+目的：让 LLM 先适应 Galgame 的文本格式和专有名词。
+Epoch：跑 1 个 Epoch (约 2 天)。
+既然您已经开始跑了，就把它当作阶段一吧！
+阶段二 (深度听力提升)：
+配置：
+bash
+++audio_encoder_conf.freeze=false  # 解冻！让它重新学习"听"Galgame
+++audio_adaptor_conf.freeze=false
+++llm_conf.freeze=true             # LLM可以冻结，也可以不冻，显存够就不冻
+Checkpoint：加载阶段一训练好的 model.pt.best 作为初始模型 (++train_conf.init_param=...)。
+Epoch：再跑 1~2 个 Epoch。
+显存注意：解冻 Encoder 后，显存占用会翻倍，Batch Size 可能需要减半 (比如从 4000 降到 2000)。
+总结： 先别停，目前的脚本（只微调 Adaptor）非常适合作为第一阶段的“热身”。等这个 Epoch 跑完（或者跑个一两天），我们拿着这个模型，开启 Encoder 微调，那才是真正提升“听懂”能力的关键时刻。
+
+
+
+
+
+
+
+(Fun-ASR) vanilla0302@Vanilla-chan:~/code/Fun-ASR-Galgame$ cp /home/vanilla0302/anaconda3/envs/Fun-ASR/lib/python3.12/site-packages/funasr/models/sense_voice/model.py /home/vanilla0302/anaconda3/envs/Fun-ASR/lib/python3.12/site-packages/funasr/models/sense_voice/model.py.backup
+(Fun-ASR) vanilla0302@Vanilla-chan:~/code/Fun-ASR-Galgame$ diff /home/vanilla0302/anaconda3/envs/Fun-ASR/lib/python3.12/site-packages/funasr/models/sense_voice/model.py /home/vanilla0302/anaconda3/envs/Fun-ASR/lib/python3.12/site-packages/funasr/models/sense_voice/model.py.backup
+135c135
+<             inputs = inputs.clone() * mask
+---
+>             inputs = inputs * mask
+141c141
+<         x = x + inputs
+---
+>         x += inputs
+562c562
+<         xs_pad = xs_pad * (self.output_size() ** 0.5)
+---
+>         xs_pad *= self.output_size() ** 0.5
+
+
+
+
+
+## 模型验证
+
+# 先对val做好归一化
+python tools/whisper_mix_normalize.py /mnt/d/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/tail1000.txt /mnt/d/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/tail1000_norm.txt
+
+# 使用eval_model.py进行一口气的“解码decode+归一化norm+”
+
+示例：
+
+python tools/eval_model.py \
+  --model_dir default \
+  --output_name pretrained_prompt \
+  --prompt "语音转写成日文：" \
+  --scp_file /mnt/d/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/tail1000.scp \
+  --ref_norm_text /mnt/d/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/tail1000_norm.txt
+
+一行：
+
+# 默认官模
+python tools/eval_model.py --model_dir default --output_name pretrained_prompt --prompt "语音转写成日文：" --scp_file /mnt/d/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/tail1000.scp --ref_norm_text /mnt/d/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/tail1000_norm.txt
+# 4000
+python tools/eval_model.py --model_dir /mnt/d/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/outputs-4000 --output_name outputs-4000 --prompt "语音转写成日文：" --scp_file /mnt/d/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/tail1000.scp --ref_norm_text /mnt/d/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/tail1000_norm.txt
+# 7000
+python tools/eval_model.py --model_dir /mnt/d/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/outputs-7000 --output_name outputs-7000 --prompt "语音转写成日文：" --scp_file /mnt/d/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/tail1000.scp --ref_norm_text /mnt/d/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/tail1000_norm.txt
+# 9500
+python tools/eval_model.py --model_dir /mnt/d/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/outputs-9500 --output_name outputs-95000 --prompt "语音转写成日文：" --scp_file /mnt/d/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/tail1000.scp --ref_norm_text /mnt/d/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/tail1000_norm.txt
+# 10000
+python tools/eval_model.py --model_dir /mnt/d/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/outputs-10000 --output_name outputs-10000 --prompt "语音转写成日文：" --scp_file /mnt/d/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/tail1000.scp --ref_norm_text /mnt/d/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/tail1000_norm.txt
+
+
+
+
+
+
+
+
+
