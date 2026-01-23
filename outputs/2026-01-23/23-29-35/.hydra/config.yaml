@@ -1,0 +1,31 @@
+model: FunAudioLLM/Fun-ASR-Nano-2512
+trust_remote_code: true
+train_data_set_list: /mnt/d/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/train_0_3746131.jsonl
+valid_data_set_list: /mnt/d/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/tail1000.jsonl
+dataset_conf:
+  data_split_num: 1
+  batch_sampler: BatchSampler
+  batch_size: 6000
+  sort_size: 1024
+  batch_type: token
+  num_workers: 4
+train_conf:
+  max_epoch: 5
+  log_interval: 1
+  resume: true
+  validate_interval: 500
+  save_checkpoint_interval: 500
+  keep_nbest_models: 5
+  avg_nbest_model: 5
+  use_deepspeed: true
+  deepspeed_config: /home/vanilla0302/code/Fun-ASR-Galgame/deepspeed_conf/ds_stage1.json
+optim_conf:
+  lr: 0.0002
+audio_encoder_conf:
+  freeze: false
+  activation_checkpoint: true
+audio_adaptor_conf:
+  freeze: false
+llm_conf:
+  freeze: true
+output_dir: /mnt/d/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/outputs

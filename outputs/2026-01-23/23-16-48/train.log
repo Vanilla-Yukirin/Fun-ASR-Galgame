@@ -1,0 +1,191 @@
+[2026-01-23 23:16:49,015][root][INFO] - download models from model hub: ms
+[2026-01-23 23:16:49,962][root][WARNING] - trust_remote_code: True
+[2026-01-23 23:16:50,902][root][INFO] - Build model, frontend, tokenizer
+[2026-01-23 23:17:12,782][root][INFO] - rank: 0, model is builded.
+[2026-01-23 23:17:12,782][root][INFO] - Loading pretrained params from /home/vanilla0302/.cache/modelscope/hub/models/FunAudioLLM/Fun-ASR-Nano-2512/model.pt
+[2026-01-23 23:17:12,788][root][INFO] - ckpt: /home/vanilla0302/.cache/modelscope/hub/models/FunAudioLLM/Fun-ASR-Nano-2512/model.pt
+[2026-01-23 23:17:15,736][root][INFO] - scope_map: ['module.', 'None']
+[2026-01-23 23:17:15,736][root][INFO] - excludes: None
+[2026-01-23 23:17:15,952][root][INFO] - Loading ckpt: /home/vanilla0302/.cache/modelscope/hub/models/FunAudioLLM/Fun-ASR-Nano-2512/model.pt, status: <All keys matched successfully>
+[2026-01-23 23:17:23,512][root][INFO] - kwargs: {'model': 'FunASRNano', 'model_conf': {'lsm_weight': 0.1, 'length_normalized_loss': True}, 'audio_encoder': 'SenseVoiceEncoderSmall', 'audio_encoder_conf': {'output_size': 512, 'attention_heads': 4, 'linear_units': 2048, 'num_blocks': 50, 'tp_blocks': 20, 'dropout_rate': 0.1, 'positional_dropout_rate': 0.1, 'attention_dropout_rate': 0.1, 'input_layer': 'pe', 'pos_enc_class': 'SinusoidalPositionEncoder', 'normalize_before': True, 'kernel_size': 11, 'sanm_shfit': 0, 'selfattention_layer_type': 'sanm', 'freeze': False, 'freeze_layer_num': -1, 'feat_permute': True, 'activation_checkpoint': True}, 'llm': 'Qwen3-0.6b', 'llm_conf': {'hub': 'hf', 'freeze': True, 'llm_dtype': 'bf16', 'init_param_path': '/home/vanilla0302/.cache/modelscope/hub/models/FunAudioLLM/Fun-ASR-Nano-2512/Qwen3-0.6B', 'use_lora': False, 'lora_conf': {'freeze_lora': True, 'task_type': 'CAUSAL_LM', 'r': 16, 'lora_alpha': 32, 'lora_dropout': 0.05, 'bias': 'none', 'target_modules': ['q_proj', 'v_proj'], 'init_param_path': ''}}, 'audio_adaptor': 'Transformer', 'audio_adaptor_conf': {'downsample_rate': 1, 'use_low_frame_rate': True, 'ffn_dim': 2048, 'llm_dim': 1024, 'encoder_dim': 512, 'n_layer': 2, 'freeze': False}, 'ctc_decoder': 'Transformer', 'detach_ctc_decoder': True, 'ctc_decoder_conf': {'downsample_rate': 1, 'ffn_dim': 2048, 'llm_dim': 512, 'encoder_dim': 512, 'n_layer': 5, 'freeze': False}, 'ctc_weight': 1.0, 'ctc_conf': {'dropout_rate': 0.0, 'ctc_type': 'builtin', 'reduce': True, 'ignore_nan_grad': True}, 'frontend': 'WavFrontend', 'frontend_conf': {'fs': 16000, 'window': 'hamming', 'n_mels': 80, 'frame_length': 25, 'frame_shift': 10, 'lfr_m': 7, 'lfr_n': 6, 'cmvn_file': None}, 'train_conf': {'use_lora': False, 'accum_grad': 1, 'grad_clip': 5, 'max_epoch': 5, 'keep_nbest_models': 5, 'log_interval': 1, 'effective_save_name_excludes': ['llm.'], 'resume': True, 'validate_interval': 500, 'save_checkpoint_interval': 500, 'avg_nbest_model': 5, 'use_bf16': False, 'use_deepspeed': True, 'deepspeed_config': '/home/vanilla0302/code/Fun-ASR-Galgame/deepspeed_conf/ds_stage1.json', 'save_init_model': False}, 'optim': 'adamw', 'optim_conf': {'lr': 0.0002, 'weight_decay': 0.0}, 'scheduler': 'warmuplr', 'scheduler_conf': {'warmup_steps': 2500}, 'dataset': 'FunASR', 'dataset_conf': {'index_ds': 'FunASR', 'batch_sampler': 'BatchSampler', 'batch_type': 'token', 'batch_size': 6000, 'max_token_length': 3500, 'shuffle': True, 'sort_size': 1024, 'batch_size_scale_ratio_max': 2, 'num_workers': 4, 'audio_adaptor_downsample_rate': 1, 'audio_encoder_downsample_rate': 6, 'data_split_num': 1, 'batch_size_sample_max': 10, 'retry': 2000, 'batch_size_token_max': 6000, 'max_source_length': 12000, 'max_target_length': 2048, 'prompt_classes': 'MultiContextPrompt', 'prompt_conf': {'max_neg_hotwords_num': 0, 'min_neg_hotwords_num': 0, 'use_hist': False, 'use_one_pass_result': True, 'use_hotwords': True, 'use_asr_hotwords': True, 'chinese_hotwords_list': None, 'english_hotwords_list': None}, 'ctc_tokenizer': 'SenseVoiceTokenizer', 'ctc_target_normalize': True, 'ctc_tokenizer_conf': {'vocab_path': None, 'is_multilingual': True, 'num_languages': 8749}, 'min_source_length': 10, 'batch_size_scale_threshold': 3000, 'use_dynamic_output_ratio': 0.0}, 'tokenizer': 'HuggingfaceTokenizer', 'tokenizer_conf': {'init_param_path': '/home/vanilla0302/.cache/modelscope/hub/models/FunAudioLLM/Fun-ASR-Nano-2512/Qwen3-0.6B'}, 'enable_tf32': True, 'debug': False, 'train_data_set_list': '/mnt/d/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/train_0_3746131.jsonl', 'valid_data_set_list': '/mnt/d/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/tail1000.jsonl', 'init_param': '/home/vanilla0302/.cache/modelscope/hub/models/FunAudioLLM/Fun-ASR-Nano-2512/model.pt', 'output_dir': '/mnt/d/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/outputs', 'config': '/home/vanilla0302/.cache/modelscope/hub/models/FunAudioLLM/Fun-ASR-Nano-2512/config.yaml', 'ctc_tokenizer_conf': {'vocab_path': '/home/vanilla0302/.cache/modelscope/hub/models/FunAudioLLM/Fun-ASR-Nano-2512/multilingual.tiktoken'}, 'is_training': True, 'trust_remote_code': True, 'model_path': '/home/vanilla0302/.cache/modelscope/hub/models/FunAudioLLM/Fun-ASR-Nano-2512', 'device': 'cpu'}
+[2026-01-23 23:17:23,512][root][INFO] - config.yaml is saved to: /mnt/d/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/outputs/config.yaml
+[2026-01-23 23:17:24,482][root][INFO] - Model structure:
+FunASRNano(
+  (audio_encoder): SenseVoiceEncoderSmall(
+    (embed): SinusoidalPositionEncoder()
+    (encoders0): ModuleList(
+      (0): EncoderLayerSANM(
+        (self_attn): MultiHeadedAttentionSANM(
+          (linear_out): Linear(in_features=512, out_features=512, bias=True)
+          (linear_q_k_v): Linear(in_features=560, out_features=1536, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (fsmn_block): Conv1d(512, 512, kernel_size=(11,), stride=(1,), groups=512, bias=False)
+          (pad_fn): ConstantPad1d(padding=(5, 5), value=0.0)
+        )
+        (feed_forward): PositionwiseFeedForward(
+          (w_1): Linear(in_features=512, out_features=2048, bias=True)
+          (w_2): Linear(in_features=2048, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): ReLU()
+        )
+        (norm1): LayerNorm((560,), eps=1e-05, elementwise_affine=True)
+        (norm2): LayerNorm((512,), eps=1e-05, elementwise_affine=True)
+        (dropout): Dropout(p=0.1, inplace=False)
+      )
+    )
+    (encoders): ModuleList(
+      (0-48): 49 x EncoderLayerSANM(
+        (self_attn): MultiHeadedAttentionSANM(
+          (linear_out): Linear(in_features=512, out_features=512, bias=True)
+          (linear_q_k_v): Linear(in_features=512, out_features=1536, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (fsmn_block): Conv1d(512, 512, kernel_size=(11,), stride=(1,), groups=512, bias=False)
+          (pad_fn): ConstantPad1d(padding=(5, 5), value=0.0)
+        )
+        (feed_forward): PositionwiseFeedForward(
+          (w_1): Linear(in_features=512, out_features=2048, bias=True)
+          (w_2): Linear(in_features=2048, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): ReLU()
+        )
+        (norm1): LayerNorm((512,), eps=1e-05, elementwise_affine=True)
+        (norm2): LayerNorm((512,), eps=1e-05, elementwise_affine=True)
+        (dropout): Dropout(p=0.1, inplace=False)
+      )
+    )
+    (tp_encoders): ModuleList(
+      (0-19): 20 x EncoderLayerSANM(
+        (self_attn): MultiHeadedAttentionSANM(
+          (linear_out): Linear(in_features=512, out_features=512, bias=True)
+          (linear_q_k_v): Linear(in_features=512, out_features=1536, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (fsmn_block): Conv1d(512, 512, kernel_size=(11,), stride=(1,), groups=512, bias=False)
+          (pad_fn): ConstantPad1d(padding=(5, 5), value=0.0)
+        )
+        (feed_forward): PositionwiseFeedForward(
+          (w_1): Linear(in_features=512, out_features=2048, bias=True)
+          (w_2): Linear(in_features=2048, out_features=512, bias=True)
+          (dropout): Dropout(p=0.1, inplace=False)
+          (activation): ReLU()
+        )
+        (norm1): LayerNorm((512,), eps=1e-05, elementwise_affine=True)
+        (norm2): LayerNorm((512,), eps=1e-05, elementwise_affine=True)
+        (dropout): Dropout(p=0.1, inplace=False)
+      )
+    )
+    (after_norm): LayerNorm((512,), eps=1e-05, elementwise_affine=True)
+    (tp_norm): LayerNorm((512,), eps=1e-05, elementwise_affine=True)
+  )
+  (llm): Qwen3ForCausalLM(
+    (model): Qwen3Model(
+      (embed_tokens): Embedding(151936, 1024)
+      (layers): ModuleList(
+        (0-27): 28 x Qwen3DecoderLayer(
+          (self_attn): Qwen3Attention(
+            (q_proj): Linear(in_features=1024, out_features=2048, bias=False)
+            (k_proj): Linear(in_features=1024, out_features=1024, bias=False)
+            (v_proj): Linear(in_features=1024, out_features=1024, bias=False)
+            (o_proj): Linear(in_features=2048, out_features=1024, bias=False)
+            (q_norm): Qwen3RMSNorm((128,), eps=1e-06)
+            (k_norm): Qwen3RMSNorm((128,), eps=1e-06)
+          )
+          (mlp): Qwen3MLP(
+            (gate_proj): Linear(in_features=1024, out_features=3072, bias=False)
+            (up_proj): Linear(in_features=1024, out_features=3072, bias=False)
+            (down_proj): Linear(in_features=3072, out_features=1024, bias=False)
+            (act_fn): SiLUActivation()
+          )
+          (input_layernorm): Qwen3RMSNorm((1024,), eps=1e-06)
+          (post_attention_layernorm): Qwen3RMSNorm((1024,), eps=1e-06)
+        )
+      )
+      (norm): Qwen3RMSNorm((1024,), eps=1e-06)
+      (rotary_emb): Qwen3RotaryEmbedding()
+    )
+    (lm_head): Linear(in_features=1024, out_features=151936, bias=False)
+  )
+  (audio_adaptor): Transformer(
+    (linear1): Linear(in_features=512, out_features=2048, bias=True)
+    (relu): ReLU()
+    (linear2): Linear(in_features=2048, out_features=1024, bias=True)
+    (blocks): ModuleList(
+      (0-1): 2 x EncoderLayer(
+        (self_attn): MultiHeadedAttention(
+          (linear_q): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_k): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_v): Linear(in_features=1024, out_features=1024, bias=True)
+          (linear_out): Linear(in_features=1024, out_features=1024, bias=True)
+          (dropout): Dropout(p=0.0, inplace=False)
+        )
+        (feed_forward): PositionwiseFeedForward(
+          (w_1): Linear(in_features=1024, out_features=256, bias=True)
+          (w_2): Linear(in_features=256, out_features=1024, bias=True)
+          (dropout): Dropout(p=0.0, inplace=False)
+          (activation): ReLU()
+        )
+        (norm1): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+        (norm2): LayerNorm((1024,), eps=1e-12, elementwise_affine=True)
+        (dropout): Dropout(p=0.0, inplace=False)
+      )
+    )
+  )
+  (ctc_decoder): Transformer(
+    (linear1): Linear(in_features=512, out_features=2048, bias=True)
+    (relu): ReLU()
+    (linear2): Linear(in_features=2048, out_features=512, bias=True)
+    (blocks): ModuleList(
+      (0-4): 5 x EncoderLayer(
+        (self_attn): MultiHeadedAttention(
+          (linear_q): Linear(in_features=512, out_features=512, bias=True)
+          (linear_k): Linear(in_features=512, out_features=512, bias=True)
+          (linear_v): Linear(in_features=512, out_features=512, bias=True)
+          (linear_out): Linear(in_features=512, out_features=512, bias=True)
+          (dropout): Dropout(p=0.0, inplace=False)
+        )
+        (feed_forward): PositionwiseFeedForward(
+          (w_1): Linear(in_features=512, out_features=128, bias=True)
+          (w_2): Linear(in_features=128, out_features=512, bias=True)
+          (dropout): Dropout(p=0.0, inplace=False)
+          (activation): ReLU()
+        )
+        (norm1): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (norm2): LayerNorm((512,), eps=1e-12, elementwise_affine=True)
+        (dropout): Dropout(p=0.0, inplace=False)
+      )
+    )
+  )
+  (ctc): CTC(
+    (ctc_lo): Linear(in_features=512, out_features=60515, bias=True)
+    (ctc_loss): CTCLoss()
+  )
+)
+
+Model summary:
+    Class Name: FunASRNano
+    Total Number of model parameters: 868.86 M
+    Number of trainable parameters: 272.81 M (31.4%)
+    Type: torch.float32
+[2026-01-23 23:17:25,279][root][INFO] - Build optim
+[2026-01-23 23:17:25,282][root][INFO] - Build scheduler
+[2026-01-23 23:17:25,282][root][INFO] - Build dataloader
+[2026-01-23 23:17:25,282][root][INFO] - Build dataloader
+[2026-01-23 23:18:48,170][root][INFO] - 
+
+total_num of samplers: 2996088, total_whrs: 3.41336, total_token_for_llm_B: 0.23881, /mnt/d/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/train_0_3746131.jsonl, ['/mnt/d/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/train_0_3746131.jsonl']
+
+
+[2026-01-23 23:18:48,170][root][INFO] - chinese_hotwords_num: 0
+[2026-01-23 23:18:48,170][root][INFO] - english_hotwords_num: 0
+[2026-01-23 23:18:48,214][root][INFO] - 
+
+total_num of samplers: 1000, total_whrs: 0.00113, total_token_for_llm_B: 7.9114e-05, /mnt/d/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/tail1000.jsonl, ['/mnt/d/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/tail1000.jsonl']
+
+
+[2026-01-23 23:18:48,214][root][INFO] - chinese_hotwords_num: 0
+[2026-01-23 23:18:48,215][root][INFO] - english_hotwords_num: 0
+[2026-01-23 23:18:48,215][root][WARNING] - distributed is not initialized, only single shard
+[2026-01-23 23:19:14,869][root][INFO] - Warning, start_step > 0, dataloader start from step: 3000
+[2026-01-23 23:19:14,869][root][INFO] - Train epoch: 0, rank: 0
+
+[2026-01-23 23:19:20,806][root][INFO] - rank: 0, dataloader start from step: 3000, batch_num: 369272, after: 366272
+[2026-01-23 23:19:28,058][root][INFO] - rank: 0, dataloader start from step: 3000, batch_num: 369272, after: 366272
