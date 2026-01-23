@@ -75,14 +75,14 @@ torchrun $DISTRIBUTED_ARGS \
 ++train_conf.max_epoch=${max_epoch} \
 ++train_conf.log_interval=1 \
 ++train_conf.resume=true \
-++train_conf.validate_interval=200 \
-++train_conf.save_checkpoint_interval=200 \
+++train_conf.validate_interval=500 \
+++train_conf.save_checkpoint_interval=500 \
 ++train_conf.keep_nbest_models=5 \
 ++train_conf.avg_nbest_model=5 \
 ++train_conf.use_deepspeed=true \
 ++train_conf.deepspeed_config="${deepspeed_config}" \
 ++optim_conf.lr=${lr} \
-++audio_encoder_conf.freeze=true \
+++audio_encoder_conf.freeze=false \
 ++audio_adaptor_conf.freeze=false \
 ++llm_conf.freeze=true \
 ++output_dir="${output_dir}" 2>&1 | tee "${log_file}"
