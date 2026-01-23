@@ -38,7 +38,7 @@ echo "Model: ${model_dir}"
 echo "Train Data: ${train_data}"
 
 # 7. 训练参数
-batch_size=4000
+batch_size=6000
 lr=0.0002
 max_epoch=5
 
@@ -85,6 +85,21 @@ torchrun $DISTRIBUTED_ARGS \
 ++audio_encoder_conf.freeze=false \
 ++audio_adaptor_conf.freeze=false \
 ++llm_conf.freeze=true \
+++audio_encoder_conf.activation_checkpoint=true \
 ++output_dir="${output_dir}" 2>&1 | tee "${log_file}"
 
 # tensorboard --logdir /mnt/d/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/outputs/tensorboard
+
+# 开启梯度检查点需要修改：
+# 135c135
+# <             inputs = inputs.clone() * mask
+# ---
+# >             inputs = inputs * mask
+# 141c141
+# <         x = x + inputs
+# ---
+# >         x += inputs
+# 562c562
+# <         xs_pad = xs_pad * (self.output_size() ** 0.5)
+# ---
+# >         xs_pad *= self.output_size() ** 0.5
