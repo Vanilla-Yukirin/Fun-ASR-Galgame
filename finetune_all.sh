@@ -85,6 +85,7 @@ torchrun $DISTRIBUTED_ARGS \
 ++audio_encoder_conf.freeze=false \
 ++audio_adaptor_conf.freeze=false \
 ++llm_conf.freeze=true \
+++train_conf.use_bf16=true \
 ++output_dir="${output_dir}" 2>&1 | tee "${log_file}"
 
 # tensorboard --logdir /mnt/d/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/outputs/tensorboard
