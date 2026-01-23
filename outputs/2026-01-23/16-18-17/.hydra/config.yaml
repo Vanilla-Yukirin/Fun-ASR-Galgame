@@ -1,0 +1,4 @@
+scp_file: /mnt/d/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/train_wav_0_3746131.scp
+transcript_file: /mnt/d/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/train_text_0_3746131.txt
+jsonl_file: /mnt/d/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/train_0_3746131.jsonl
+prompt: 语音转写成日文：
