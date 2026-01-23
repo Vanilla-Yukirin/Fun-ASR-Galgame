@@ -56,8 +56,9 @@ def process_file_list(file_list, wav_scp_path, text_txt_path):
     
     # 根据 CPU 核心数决定进程数，保留一点余量
     num_processes = max(1, cpu_count() - 1)
-    # 计算 chunk size，确保任务分配比较均匀
-    chunk_size = max(100, len(file_list) // (num_processes * 4))
+    # chunk_size 设置较小，以便进度条能频繁更新
+    # 虽然这会增加一点进程间通信开销，但用户体验更好
+    chunk_size = 1000
     
     # 将文件列表切分为 chunks
     chunks = [file_list[i:i + chunk_size] for i in range(0, len(file_list), chunk_size)]
