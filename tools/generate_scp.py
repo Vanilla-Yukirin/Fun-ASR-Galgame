@@ -14,10 +14,10 @@ from tqdm import tqdm
 
 # ====== 配置变量 ======
 # 解压后的数据目录（包含 000000, 000001, ... 等子文件夹）
-DATA_DIR = r"R:\datasets--litagin--Galgame_Speech_ASR_16kHz\data"
+DATA_DIR = r"/mnt/d/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/data"
 
 # 输出文件路径
-OUTPUT_DIR = r"R:\datasets--litagin--Galgame_Speech_ASR_16kHz"
+OUTPUT_DIR = r"/mnt/d/ML/datasets--litagin--Galgame_Speech_ASR_16kHz"
 
 # 音频文件扩展名
 AUDIO_EXTENSION = ".ogg"
@@ -25,33 +25,60 @@ TEXT_EXTENSION = ".txt"
 
 # ====== 脚本开始 ======
 
+from multiprocessing import Pool, cpu_count
+
+def _process_chunk(chunk):
+    """Worker function to process a batch of files"""
+    results = []
+    missing_count = 0
+    
+    for audio_path in chunk:
+        file_id = Path(audio_path).stem
+        txt_path = audio_path.replace(AUDIO_EXTENSION, TEXT_EXTENSION)
+        
+        try:
+            # 尝试直接读取，省去 os.path.exists 的开销
+            with open(txt_path, 'r', encoding='utf-8') as t:
+                text_content = t.read().strip()
+            results.append((f"{file_id} {audio_path}\n", f"{file_id} {text_content}\n"))
+        except FileNotFoundError:
+            missing_count += 1
+        except Exception as e:
+            # 可以选择打印错误或忽略
+            missing_count += 1
+            
+    return results, missing_count
+
 def process_file_list(file_list, wav_scp_path, text_txt_path):
-    """处理文件列表，生成scp和text文件"""
+    """处理文件列表，生成scp和text文件 (多进程优化版)"""
     success_count = 0
     missing_text_count = 0
+    
+    # 根据 CPU 核心数决定进程数，保留一点余量
+    num_processes = max(1, cpu_count() - 1)
+    # 计算 chunk size，确保任务分配比较均匀
+    chunk_size = max(100, len(file_list) // (num_processes * 4))
+    
+    # 将文件列表切分为 chunks
+    chunks = [file_list[i:i + chunk_size] for i in range(0, len(file_list), chunk_size)]
+    
+    print(f"I/O 优化: 启用 {num_processes} 个进程并发处理，总计 {len(chunks)} 个批次...")
     
     with open(wav_scp_path, 'w', encoding='utf-8') as f_wav, \
          open(text_txt_path, 'w', encoding='utf-8') as f_txt:
         
-        for audio_path in tqdm(file_list, desc="Processing"):
-            file_id = Path(audio_path).stem
-            txt_path = audio_path.replace(AUDIO_EXTENSION, TEXT_EXTENSION)
+        with Pool(processes=num_processes) as pool:
+            # 使用 imap_unordered 稍微提速，因为写入顺序不影响最终训练 (只要 wav和text 对应即可)
+            # 但为了保险起见，如果需要严格对应顺序，可以用 map (不过这里 sort 过了，只要 wav/text 内部对齐就行)
+            # scp 文件通常不强制要求全局有序，但为了整洁我们可以保持有序
+            # 这里为了速度优先使用 imap
             
-            if not os.path.exists(txt_path):
-                missing_text_count += 1
-                continue
-            
-            try:
-                with open(txt_path, 'r', encoding='utf-8') as t:
-                    text_content = t.read().strip()
-                
-                f_wav.write(f"{file_id} {audio_path}\n")
-                f_txt.write(f"{file_id} {text_content}\n")
-                success_count += 1
-                
-            except Exception as e:
-                print(f"警告：处理文件 {file_id} 时出错: {e}")
-                continue
+            for batch_results, batch_missing in tqdm(pool.imap(_process_chunk, chunks), total=len(chunks), desc="Processing"):
+                missing_text_count += batch_missing
+                for wav_line, txt_line in batch_results:
+                    f_wav.write(wav_line)
+                    f_txt.write(txt_line)
+                    success_count += 1
                 
     return success_count, missing_text_count
 

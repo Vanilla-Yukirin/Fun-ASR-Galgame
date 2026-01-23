@@ -11,7 +11,7 @@ $gpu_num = 1
 $model_dir = "FunAudioLLM/Fun-ASR-Nano-2512"
 
 # 3. 数据路径 (请确认文件名是否正确)
-$workspace_dir = "R:\datasets--litagin--Galgame_Speech_ASR_16kHz"
+$workspace_dir = "/mnt/d/ML/datasets--litagin--Galgame_Speech_ASR_16kHz"
 $train_data = Join-Path $workspace_dir "train_0_1000.jsonl"
 $val_data = Join-Path $workspace_dir "val_0_1000.jsonl"
 
@@ -83,4 +83,4 @@ Write-Host "python -m funasr.bin.train $cmd_args"
 python -m funasr.bin.train $cmd_args 2>&1 | Tee-Object -FilePath $log_file
 
 
-# tensorboard --logdir R:\datasets--litagin--Galgame_Speech_ASR_16kHz\outputs_0_1000\tensorboard
+# tensorboard --logdir /mnt/d/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/outputs_0_1000/tensorboard
