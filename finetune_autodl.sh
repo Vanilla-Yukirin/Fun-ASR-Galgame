@@ -38,7 +38,7 @@ echo "Model: ${model_dir}"
 echo "Train Data: ${train_data}"
 
 # 7. 训练参数
-batch_size=16000
+batch_size=14500
 lr=0.0002
 max_epoch=1
 
@@ -72,7 +72,7 @@ torchrun $DISTRIBUTED_ARGS \
 ++dataset_conf.batch_size=${batch_size} \
 ++dataset_conf.sort_size=1024 \
 ++dataset_conf.batch_type="token" \
-++dataset_conf.num_workers=4 \
+++dataset_conf.num_workers=8 \
 ++train_conf.max_epoch=${max_epoch} \
 ++train_conf.log_interval=1 \
 ++train_conf.resume=true \
