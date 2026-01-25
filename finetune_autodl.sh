@@ -94,3 +94,9 @@ torchrun $DISTRIBUTED_ARGS \
 # 在终端中执行以下命令启动TensorBoard
 # tensorboard --port 6007 --logdir /path/to/your/tf-logs/direction
 # tensorboard --port 6007 --logdir /root/autodl-tmp/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/outputs/tensorboard
+
+# 如果遇到：RuntimeError: operator torchvision::nms does not exist
+# pip list | grep torch
+# pip uninstall torchvision -y
+# pip install torchvision --no-cache-dir
+# python -c "import torchvision; print(torchvision.__version__); print('OK')"
