@@ -55,7 +55,8 @@ DISTRIBUTED_ARGS="
 
 # 获取 funasr-train 命令 (DS版本)
 # 如果是 conda 环境，确保已安装 funasr
-train_tool="/home/vanilla0302/anaconda3/envs/Fun-ASR/bin/funasr-train"
+# which funasr-train
+train_tool="/root/miniconda3/bin/funasr-train"
 
 echo "Running command with torchrun..."
 
@@ -88,3 +89,8 @@ torchrun $DISTRIBUTED_ARGS \
 ++output_dir="${output_dir}" 2>&1 | tee "${log_file}"
 
 # tensorboard --logdir /root/autodl-tmp/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/outputs/tensorboard
+
+# 首先结束默认启动的TensorBoard进程，执行命令：ps -ef | grep tensorboard | awk '{print $2}' | xargs kill -9 
+# 在终端中执行以下命令启动TensorBoard
+# tensorboard --port 6007 --logdir /path/to/your/tf-logs/direction
+# tensorboard --port 6007 --logdir /root/autodl-tmp/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/outputs/tensorboard
