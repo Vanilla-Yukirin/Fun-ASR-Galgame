@@ -14,10 +14,10 @@ from tqdm import tqdm
 
 # ====== 配置变量 ======
 # 解压后的数据目录（包含 000000, 000001, ... 等子文件夹）
-DATA_DIR = r"/mnt/d/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/data"
+DATA_DIR = r"/root/autodl-tmp/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/data"
 
 # 输出文件路径
-OUTPUT_DIR = r"/mnt/d/ML/datasets--litagin--Galgame_Speech_ASR_16kHz"
+OUTPUT_DIR = r"/root/autodl-tmp/ML/datasets--litagin--Galgame_Speech_ASR_16kHz"
 
 # 音频文件扩展名
 AUDIO_EXTENSION = ".ogg"
@@ -161,13 +161,13 @@ def main():
         print("保持原始顺序")
         shuffle_tag = ""
     
-    # 8:2 划分训练集和验证集
-    split_idx = int(len(selected_files) * 0.8)
+    # 9:1 划分训练集和验证集
+    split_idx = int(len(selected_files) * 0.90)
     train_files = selected_files[:split_idx]
     val_files = selected_files[split_idx:]
     
-    print(f"\n训练集数量: {len(train_files)} (80%)")
-    print(f"验证集数量: {len(val_files)} (20%)")
+    print(f"\n训练集数量: {len(train_files)} (90%)")
+    print(f"验证集数量: {len(val_files)} (10%)")
     
     # 生成带范围标识的文件名
     range_tag = f"{offset}_{offset + count}{shuffle_tag}"
