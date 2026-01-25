@@ -3,13 +3,23 @@
 # 下载数据集
 # huggingface-cli download --repo-type dataset litagin/Galgame_Speech_ASR_16kHz --local-dir /mnt/o/datasets/huggingface/hub/datasets--litagin--Galgame_Speech_ASR_16kHz --local-dir-use-symlinks False --resume-download
 
+# hf download --repo-type dataset litagin/Galgame_Speech_ASR_16kHz --local-dir "$env:USERPROFILE\Downloads\datasets--litagin--Galgame_Speech_ASR_16kHz"
+
+# data = /root/autodl-fs
+
+# data = /root/autodl-tmp/data
+
+# data = /root/autodl-tmp/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/data
+
 # ====== 配置变量 ======
 # 源目录（包含tar文件的目录）
-SOURCE_DIR="/mnt/d/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/data"
+# SOURCE_DIR="/mnt/d/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/data"
+SOURCE_DIR="/root/autodl-tmp/data"
 
 # 目标目录（解压到的目录）
-TARGET_DIR="/mnt/d/datasets--litagin--Galgame_Speech_ASR_16kHz/data"
+# TARGET_DIR="/mnt/d/datasets--litagin--Galgame_Speech_ASR_16kHz/data"
 # TARGET_DIR="/mnt/d/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/data"
+TARGET_DIR="/root/autodl-tmp/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/data"
 
 # tar文件前缀
 TAR_PREFIX="galgame-speech-asr-16kHz-train-"
