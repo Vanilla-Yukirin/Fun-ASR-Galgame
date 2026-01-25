@@ -87,24 +87,4 @@ torchrun $DISTRIBUTED_ARGS \
 ++llm_conf.freeze=true \
 ++output_dir="${output_dir}" 2>&1 | tee "${log_file}"
 
-# tensorboard --logdir /mnt/d/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/outputs/tensorboard
-
-
-
-# 开启梯度检查点需要修改：
-# ++audio_encoder_conf.activation_checkpoint=true \
-# 135c135
-# <             inputs = inputs.clone() * mask
-# ---
-# >             inputs = inputs * mask
-# 141c141
-# <         x = x + inputs
-# ---
-# >         x += inputs
-# 562c562
-# <         xs_pad = xs_pad * (self.output_size() ** 0.5)
-# ---
-# >         xs_pad *= self.output_size() ** 0.5
-
-# 开启bf16
-# ++train_conf.use_bf16=true \
+# tensorboard --logdir /root/autodl-tmp/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/outputs/tensorboard
