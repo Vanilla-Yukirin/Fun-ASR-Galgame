@@ -374,3 +374,12 @@ python tools/select_long_tail.py --input-text /root/autodl-tmp/ML/datasets--lita
 python tools/select_long_tail.py --input-text /root/autodl-tmp/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/train_text_0_3746131.txt --input-scp  /root/autodl-tmp/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/train_wav_0_3746131.scp --output-text /root/autodl-tmp/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/long_tail.txt --output-scp  /root/autodl-tmp/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/long_tail.scp --threshold 100 --target-count 50 --seed 42 --verbose-every 100000 --max-dup-per-utt 5
 这样得到的是430462/3746131条复制数据，占比11%
 
+# 添加Reazon-small数据集
+unzip -q /root/autodl-fs/small.zip -d /root/autodl-tmp/ML/Reazon/
+# 这样解压应该是不会有嵌套的：
+# /root/autodl-tmp/ML/Reazon/small/train/audio
+# /root/autodl-tmp/ML/Reazon/small/train/manifests
+# 生成对应的txt和scp
+python tools/rebase_manifests.py --audio-dir /root/autodl-tmp/ML/Reazon/small/train/audio --transcript /root/autodl-tmp/ML/Reazon/small/train/manifests/train.txt --output-scp /root/autodl-tmp/ML/Reazon/small/train/manifests/train_reazon.scp --output-text /root/autodl-tmp/ML/Reazon/small/train/manifests/train_reazon.txt --ext .flac --skip-missing
+SCP: /root/autodl-tmp/ML/Reazon/small/train/manifests/train_reazon.scp
+TEXT: /root/autodl-tmp/ML/Reazon/small/train/manifests/train_reazon.txt
