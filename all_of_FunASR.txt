@@ -365,3 +365,12 @@ python tools/eval_model.py --model_dir /root/autodl-tmp/ML/datasets--litagin--Ga
 
 
 
+加数据!!!
+
+# 添加长尾数据
+python tools/select_long_tail.py --input-text /root/autodl-tmp/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/train_text_0_3746131.txt --input-scp  /root/autodl-tmp/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/train_wav_0_3746131.scp --output-text /root/autodl-tmp/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/long_tail.txt --output-scp  /root/autodl-tmp/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/long_tail.scp --threshold 200 --duplications 200 --seed 42 --verbose-every 100000
+python tools/select_long_tail.py --input-text /root/autodl-tmp/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/train_text_0_3746131.txt --input-scp  /root/autodl-tmp/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/train_wav_0_3746131.scp --output-text /root/autodl-tmp/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/long_tail.txt --output-scp  /root/autodl-tmp/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/long_tail.scp --threshold 200 --target-count 200 --seed 42 --verbose-every 100000 --max-dup-per-utt 20
+python tools/select_long_tail.py --input-text /root/autodl-tmp/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/train_text_0_3746131.txt --input-scp  /root/autodl-tmp/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/train_wav_0_3746131.scp --output-text /root/autodl-tmp/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/long_tail.txt --output-scp  /root/autodl-tmp/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/long_tail.scp --threshold 100 --target-count 100 --seed 42 --verbose-every 100000 --max-dup-per-utt 5
+python tools/select_long_tail.py --input-text /root/autodl-tmp/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/train_text_0_3746131.txt --input-scp  /root/autodl-tmp/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/train_wav_0_3746131.scp --output-text /root/autodl-tmp/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/long_tail.txt --output-scp  /root/autodl-tmp/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/long_tail.scp --threshold 100 --target-count 50 --seed 42 --verbose-every 100000 --max-dup-per-utt 5
+这样得到的是430462/3746131条复制数据，占比11%
+
