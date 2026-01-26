@@ -474,7 +474,7 @@ cat /root/autodl-tmp/ML/mixed1/val_galgame_tail.scp \
 rm /root/autodl-tmp/ML/mixed1/val_ids.tmp
 
 # 构建jsonl
-python tools/scp2jsonl.py "++scp_file=/root/autodl-tmp/ML/mixed1/val_mixed1_5k.scp" "++transcript_file=/root/autodl-tmp/ML/mixed1/val_mixed1_5k.scp" "++jsonl_file=/root/autodl-tmp/ML/mixed1/val_mixed1_5k.jsonl" "++prompt='语音转写成日文：'"
+python tools/scp2jsonl.py "++scp_file=/root/autodl-tmp/ML/mixed1/val_mixed1_5k.scp" "++transcript_file=/root/autodl-tmp/ML/mixed1/val_mixed1_5k.txt" "++jsonl_file=/root/autodl-tmp/ML/mixed1/val_mixed1_5k.jsonl" "++prompt='语音转写成日文：'"
 
 # 复制权重
 cp /root/autodl-tmp/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/outputs /root/autodl-tmp/ML/mixed1/ -r
