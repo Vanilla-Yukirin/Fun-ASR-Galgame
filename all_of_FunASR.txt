@@ -383,3 +383,28 @@ unzip -q /root/autodl-fs/small.zip -d /root/autodl-tmp/ML/Reazon/
 python tools/rebase_manifests.py --audio-dir /root/autodl-tmp/ML/Reazon/small/train/audio --transcript /root/autodl-tmp/ML/Reazon/small/train/manifests/train.txt --output-scp /root/autodl-tmp/ML/Reazon/small/train/manifests/train_reazon.scp --output-text /root/autodl-tmp/ML/Reazon/small/train/manifests/train_reazon.txt --ext .flac --skip-missing
 SCP: /root/autodl-tmp/ML/Reazon/small/train/manifests/train_reazon.scp
 TEXT: /root/autodl-tmp/ML/Reazon/small/train/manifests/train_reazon.txt
+
+# 合并三个train
+需要合并的三个TEXT
+/root/autodl-tmp/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/train_text_0_3746131.txt
+/root/autodl-tmp/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/long_tail.txt
+/root/autodl-tmp/ML/Reazon/small/train/manifests/train_reazon.txt
+以及三个SCP
+/root/autodl-tmp/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/train_wav_0_3746131.scp
+/root/autodl-tmp/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/long_tail.scp
+/root/autodl-tmp/ML/Reazon/small/train/manifests/train_reazon.scp
+python tools/mix_manifests.py \
+  --text-files \
+    /root/autodl-tmp/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/train_text_0_3746131.txt \
+    /root/autodl-tmp/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/long_tail.txt \
+    /root/autodl-tmp/ML/Reazon/small/train/manifests/train_reazon.txt \
+  --scp-files \
+    /root/autodl-tmp/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/train_wav_0_3746131.scp \
+    /root/autodl-tmp/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/long_tail.scp \
+    /root/autodl-tmp/ML/Reazon/small/train/manifests/train_reazon.scp \
+  --output-text /root/autodl-tmp/ML/mixed1/train_mixed1.txt \
+  --output-scp  /root/autodl-tmp/ML/mixed1/train_mixed1.scp \
+  --seed 42
+
+# 构建jsonl
+python tools/scp2jsonl.py "++scp_file=/root/autodl-tmp/ML/mixed1/train_mixed1.scp" "++transcript_file=/root/autodl-tmp/ML/mixed1/train_mixed1.txt" "++jsonl_file=/root/autodl-tmp/ML/mixed1/train_mixed1.jsonl" "++prompt='语音转写成日文：'"
