@@ -6,3 +6,5 @@ zhconv
 whisper_normalizer
 pyopenjtalk-plus
 compute-wer
+datasets
+tqdm
