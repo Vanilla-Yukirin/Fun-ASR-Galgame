@@ -43,7 +43,7 @@ echo "Init Param: ${init_param}"
 echo "Train Data: ${train_data}"
 echo "Validation Data: ${val_data}"
 # 7. 训练参数
-batch_size=20000
+batch_size=28000
 lr=0.0001 # 调小一点
 max_epoch=1
 
@@ -92,6 +92,7 @@ torchrun $DISTRIBUTED_ARGS \
 ++audio_adaptor_conf.freeze=false \
 ++llm_conf.freeze=false \
 ++train_conf.init_param="${init_param}" \
+++device="cuda" \
 ++output_dir="${output_dir}" 2>&1 | tee "${log_file}"
 
 # tensorboard --logdir /root/autodl-tmp/ML/mixed1/outputs/tensorboard
