@@ -6,3 +6,6 @@ zhconv
 whisper_normalizer
 pyopenjtalk-plus
 compute-wer
+datasets<3.0.0
+soundfile
+librosa
