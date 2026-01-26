@@ -383,28 +383,91 @@ unzip -q /root/autodl-fs/small.zip -d /root/autodl-tmp/ML/Reazon/
 python tools/rebase_manifests.py --audio-dir /root/autodl-tmp/ML/Reazon/small/train/audio --transcript /root/autodl-tmp/ML/Reazon/small/train/manifests/train.txt --output-scp /root/autodl-tmp/ML/Reazon/small/train/manifests/train_reazon.scp --output-text /root/autodl-tmp/ML/Reazon/small/train/manifests/train_reazon.txt --ext .flac --skip-missing
 SCP: /root/autodl-tmp/ML/Reazon/small/train/manifests/train_reazon.scp
 TEXT: /root/autodl-tmp/ML/Reazon/small/train/manifests/train_reazon.txt
+Processed transcript: 62047 entries
+Written: 58405
+Missing audio: 3642 (skipped)
+# 划分数据集和验证集，val=2000
+cd /root/autodl-tmp/ML/Reazon/small/train/manifests
+# 1. 随机打乱原始 txt，存为临时文件
+shuf train_reazon.txt > train_reazon_shuffled.tmp
+# 2. 取前 2000 行作为验证集文本 (val_reazon.txt)
+head -n 2000 train_reazon_shuffled.tmp > val_reazon_temp.txt
+# 3. 取 2000 行之后的所有行作为训练集临时文本 (train_reazon_temp.txt)
+tail -n +2001 train_reazon_shuffled.tmp > train_reazon_temp.txt
+# 1. 提取验证集的 ID 列表
+awk '{print $1}' val_reazon_temp.txt > val_ids.tmp
+# 2. 根据 ID 列表，从总 scp 中筛选出验证集的 scp
+grep -F -f val_ids.tmp train_reazon.scp > val_reazon_temp.scp
+# 3. 提取训练集的 ID 列表
+awk '{print $1}' train_reazon_temp.txt > train_ids.tmp
+# 4. 根据 ID 列表，从总 scp 中筛选出训练集的 scp
+grep -F -f train_ids.tmp train_reazon.scp > train_reazon_temp.scp
+# 1. 修复训练集 (Train)
+sort -k1,1 train_reazon_temp.txt -o train_reazon_temp.txt
+sort -k1,1 train_reazon_temp.scp -o train_reazon_temp.scp
+# 2. 修复验证集 (Val) - 这个之前肯定也是错的，必须修
+sort -k1,1 val_reazon_temp.txt -o val_reazon_temp.txt
+sort -k1,1 val_reazon_temp.scp -o val_reazon_temp.scp
+# x10
+# 1. 清空/创建最终的目标文件
+> train_reazon_final_x10.txt
+> train_reazon_final_x10.scp
+# 2. 循环 10 次，将临时训练集追加到最终文件中
+for i in {1..10}; do
+    cat train_reazon_temp.txt >> train_reazon_final_x10.txt
+    cat train_reazon_temp.scp >> train_reazon_final_x10.scp
+done
+echo "完成！训练集已放大 10 倍。"
+# 删除临时文件
+# rm *.tmp train_reazon_temp.txt train_reazon_temp.scp
+wc -l train_reazon_final_x10.txt
+# 我回来啦！
+cd /root/code/Fun-ASR-Galgame
+
 
 # 合并三个train
 需要合并的三个TEXT
 /root/autodl-tmp/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/train_text_0_3746131.txt
 /root/autodl-tmp/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/long_tail.txt
-/root/autodl-tmp/ML/Reazon/small/train/manifests/train_reazon.txt
+/root/autodl-tmp/ML/Reazon/small/train/manifests/train_reazon_final_x10.txt
 以及三个SCP
 /root/autodl-tmp/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/train_wav_0_3746131.scp
 /root/autodl-tmp/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/long_tail.scp
-/root/autodl-tmp/ML/Reazon/small/train/manifests/train_reazon.scp
+/root/autodl-tmp/ML/Reazon/small/train/manifests/train_reazon_final_x10.scp
 python tools/mix_manifests.py \
   --text-files \
     /root/autodl-tmp/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/train_text_0_3746131.txt \
     /root/autodl-tmp/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/long_tail.txt \
-    /root/autodl-tmp/ML/Reazon/small/train/manifests/train_reazon.txt \
+    /root/autodl-tmp/ML/Reazon/small/train/manifests/train_reazon_final_x10.txt \
   --scp-files \
     /root/autodl-tmp/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/train_wav_0_3746131.scp \
     /root/autodl-tmp/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/long_tail.scp \
-    /root/autodl-tmp/ML/Reazon/small/train/manifests/train_reazon.scp \
+    /root/autodl-tmp/ML/Reazon/small/train/manifests/train_reazon_final_x10.scp \
   --output-text /root/autodl-tmp/ML/mixed1/train_mixed1.txt \
   --output-scp  /root/autodl-tmp/ML/mixed1/train_mixed1.scp \
   --seed 42
 
+Mixed 4366029 entries from 3 pairs
+Text -> /root/autodl-tmp/ML/mixed1/train_mixed1.txt
+SCP  -> /root/autodl-tmp/ML/mixed1/train_mixed1.scp
+
 # 构建jsonl
 python tools/scp2jsonl.py "++scp_file=/root/autodl-tmp/ML/mixed1/train_mixed1.scp" "++transcript_file=/root/autodl-tmp/ML/mixed1/train_mixed1.txt" "++jsonl_file=/root/autodl-tmp/ML/mixed1/train_mixed1.jsonl" "++prompt='语音转写成日文：'"
+
+
+# 合并val
+# 重新取一个更大一点的val，确保稳定性
+tail -n 3000 /root/autodl-tmp/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/val_text_0_3746131.txt > /root/autodl-tmp/ML/mixed1/val_galgame_tail.txt
+awk '{print $1}' /root/autodl-tmp/ML/mixed1/val_galgame_tail.txt > /root/autodl-tmp/ML/mixed1/val_ids.tmp
+grep -F -f /root/autodl-tmp/ML/mixed1/val_ids.tmp /root/autodl-tmp/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/val_wav_0_3746131.scp > /root/autodl-tmp/ML/mixed1/val_galgame_tail.scp
+# 开始合并（不需要打乱）
+cat /root/autodl-tmp/ML/mixed1/val_galgame_tail.txt \
+    /root/autodl-tmp/ML/Reazon/small/train/manifests/val_reazon_temp.txt \
+    > /root/autodl-tmp/ML/mixed1/val_mixed_5k.txt
+cat /root/autodl-tmp/ML/mixed1/val_galgame_tail.scp \
+    /root/autodl-tmp/ML/Reazon/small/train/manifests/val_reazon_temp.scp \
+    > /root/autodl-tmp/ML/mixed1/val_mixed_5k.scp
+rm /root/autodl-tmp/ML/mixed1/val_ids.tmp
+
+# 构建jsonl
+python tools/scp2jsonl.py "++scp_file=/root/autodl-tmp/ML/mixed1/val_mixed_5k.scp" "++transcript_file=/root/autodl-tmp/ML/mixed1/val_mixed_5k.scp" "++jsonl_file=/root/autodl-tmp/ML/mixed1/val_mixed_5k.jsonl" "++prompt='语音转写成日文：'"
