@@ -335,3 +335,33 @@ tail -n 1000 /root/autodl-tmp/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/val
 tail -n 1000 /root/autodl-tmp/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/val_text_0_3746131.txt > /root/autodl-tmp/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/tail1000.txt
 
 python tools/scp2jsonl.py "++scp_file=/root/autodl-tmp/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/tail1000.scp" "++transcript_file=/root/autodl-tmp/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/tail1000.txt" "++jsonl_file=/root/autodl-tmp/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/tail1000.jsonl" "++prompt='语音转写成日文：'"
+
+# 训练
+
+
+
+## 模型验证
+
+# 先对val做好归一化
+python tools/whisper_mix_normalize.py /root/autodl-tmp/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/tail1000.txt /root/autodl-tmp/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/tail1000_norm.txt
+
+# 使用eval_model.py进行一口气的“解码decode+归一化norm+”
+
+示例：
+
+python tools/eval_model.py \
+  --model_dir default \
+  --output_name pretrained_prompt \
+  --prompt "语音转写成日文：" \
+  --scp_file /root/autodl-tmp/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/tail1000.scp \
+  --ref_norm_text /root/autodl-tmp/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/tail1000_norm.txt
+
+一行：
+
+# 默认官模
+python tools/eval_model.py --model_dir default --output_name pretrained_prompt --prompt "语音转写成日文：" --scp_file /root/autodl-tmp/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/tail1000.scp --ref_norm_text /root/autodl-tmp/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/tail1000_norm.txt
+# 10000
+python tools/eval_model.py --model_dir /root/autodl-tmp/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/outputs --output_name outputs-last --prompt "语音转写成日文：" --scp_file /root/autodl-tmp/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/tail1000.scp --ref_norm_text /root/autodl-tmp/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/tail1000_norm.txt
+
+
+
