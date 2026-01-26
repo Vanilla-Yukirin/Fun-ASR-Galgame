@@ -454,6 +454,10 @@ SCP  -> /root/autodl-tmp/ML/mixed1/train_mixed1.scp
 # 构建jsonl
 python tools/scp2jsonl.py "++scp_file=/root/autodl-tmp/ML/mixed1/train_mixed1.scp" "++transcript_file=/root/autodl-tmp/ML/mixed1/train_mixed1.txt" "++jsonl_file=/root/autodl-tmp/ML/mixed1/train_mixed1.jsonl" "++prompt='语音转写成日文：'"
 
+Processing completed:
+  Total lines: 4366029
+  Successfully processed: 4365240
+  Failed: 0
 
 # 合并val
 # 重新取一个更大一点的val，确保稳定性
@@ -463,14 +467,18 @@ grep -F -f /root/autodl-tmp/ML/mixed1/val_ids.tmp /root/autodl-tmp/ML/datasets--
 # 开始合并（不需要打乱）
 cat /root/autodl-tmp/ML/mixed1/val_galgame_tail.txt \
     /root/autodl-tmp/ML/Reazon/small/train/manifests/val_reazon_temp.txt \
-    > /root/autodl-tmp/ML/mixed1/val_mixed_5k.txt
+    > /root/autodl-tmp/ML/mixed1/val_mixed1_5k.txt
 cat /root/autodl-tmp/ML/mixed1/val_galgame_tail.scp \
     /root/autodl-tmp/ML/Reazon/small/train/manifests/val_reazon_temp.scp \
-    > /root/autodl-tmp/ML/mixed1/val_mixed_5k.scp
+    > /root/autodl-tmp/ML/mixed1/val_mixed1_5k.scp
 rm /root/autodl-tmp/ML/mixed1/val_ids.tmp
 
 # 构建jsonl
-python tools/scp2jsonl.py "++scp_file=/root/autodl-tmp/ML/mixed1/val_mixed_5k.scp" "++transcript_file=/root/autodl-tmp/ML/mixed1/val_mixed_5k.scp" "++jsonl_file=/root/autodl-tmp/ML/mixed1/val_mixed_5k.jsonl" "++prompt='语音转写成日文：'"
+python tools/scp2jsonl.py "++scp_file=/root/autodl-tmp/ML/mixed1/val_mixed1_5k.scp" "++transcript_file=/root/autodl-tmp/ML/mixed1/val_mixed1_5k.scp" "++jsonl_file=/root/autodl-tmp/ML/mixed1/val_mixed1_5k.jsonl" "++prompt='语音转写成日文：'"
 
 # 复制权重
 cp /root/autodl-tmp/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/outputs /root/autodl-tmp/ML/mixed1/ -r
+
+# 开训
+
+bash finetune_autodl_1epoch.sh

@@ -13,15 +13,19 @@ workspace=`pwd`
 export CUDA_VISIBLE_DEVICES="0"
 gpu_num=$(echo $CUDA_VISIBLE_DEVICES | awk -F "," '{print NF}')
 
-# 3. 模型路径 (会自动从 ModelScope 下载或使用本地缓存)
-model_dir="FunAudioLLM/Fun-ASR-Nano-2512"
+# 3. 模型路径
+# 直接使用原始训练输出作为基座，不再复制：
+# /root/autodl-tmp/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/outputs
+model_dir="/root/autodl-tmp/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/outputs"
+# 若需指定特定 ckpt，可填入；否则留空沿用目录内默认权重。
+init_param=""
 
 # 4. 数据路径
 external_root="/root/autodl-tmp/ML/mixed1"
 train_data="${external_root}/train_mixed1.jsonl"
 val_data="${external_root}/val_mixed1_5k.jsonl"
 
-# 5. 输出路径
+# 5. 输出路径（继续写入 mixed1/outputs）
 output_dir="${external_root}/outputs"
 log_file="${output_dir}/log.txt"
 
@@ -35,6 +39,7 @@ mkdir -p "${output_dir}"
 
 echo "Log file: ${log_file}"
 echo "Model: ${model_dir}"
+echo "Init Param: ${init_param}"
 echo "Train Data: ${train_data}"
 echo "Validation Data: ${val_data}"
 # 7. 训练参数
@@ -85,7 +90,8 @@ torchrun $DISTRIBUTED_ARGS \
 ++optim_conf.lr=${lr} \
 ++audio_encoder_conf.freeze=false \
 ++audio_adaptor_conf.freeze=false \
-++llm_conf.freeze=true \
+++llm_conf.freeze=false \
+++train_conf.init_param="${init_param}" \
 ++output_dir="${output_dir}" 2>&1 | tee "${log_file}"
 
 # tensorboard --logdir /root/autodl-tmp/ML/mixed1/outputs/tensorboard
