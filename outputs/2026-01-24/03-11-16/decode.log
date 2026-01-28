@@ -1,0 +1,51 @@
+[2026-01-24 03:11:19,400][root][INFO] - download models from model hub: ms
+[2026-01-24 03:11:20,544][root][WARNING] - trust_remote_code: True
+[2026-01-24 03:11:44,983][root][INFO] - rank: 0, model is builded.
+[2026-01-24 03:11:44,983][root][INFO] - Loading pretrained params from /home/vanilla0302/.cache/modelscope/hub/models/FunAudioLLM/Fun-ASR-Nano-2512/model.pt
+[2026-01-24 03:11:44,990][root][INFO] - ckpt: /home/vanilla0302/.cache/modelscope/hub/models/FunAudioLLM/Fun-ASR-Nano-2512/model.pt
+[2026-01-24 03:11:50,676][root][INFO] - scope_map: ['module.', 'None']
+[2026-01-24 03:11:50,677][root][INFO] - excludes: None
+[2026-01-24 03:11:50,929][root][INFO] - Loading ckpt: /home/vanilla0302/.cache/modelscope/hub/models/FunAudioLLM/Fun-ASR-Nano-2512/model.pt, status: <All keys matched successfully>
+[2026-01-24 03:11:52,211][root][INFO] - Building VAD model.
+[2026-01-24 03:11:52,211][root][INFO] - download models from model hub: ms
+[2026-01-24 03:11:53,341][root][WARNING] - trust_remote_code: False
+[2026-01-24 03:11:53,349][root][INFO] - Loading pretrained params from /home/vanilla0302/.cache/modelscope/hub/models/iic/speech_fsmn_vad_zh-cn-16k-common-pytorch/model.pt
+[2026-01-24 03:11:53,350][root][INFO] - ckpt: /home/vanilla0302/.cache/modelscope/hub/models/iic/speech_fsmn_vad_zh-cn-16k-common-pytorch/model.pt
+[2026-01-24 03:11:53,356][root][INFO] - scope_map: ['module.', 'None']
+[2026-01-24 03:11:53,356][root][INFO] - excludes: None
+[2026-01-24 03:11:53,360][root][INFO] - Loading ckpt: /home/vanilla0302/.cache/modelscope/hub/models/iic/speech_fsmn_vad_zh-cn-16k-common-pytorch/model.pt, status: <All keys matched successfully>
+[2026-01-24 03:13:00,701][root][INFO] - decoding, utt: ffef93e0b9fe08c80c3d1b18111da5a9becb8d58d0cbc9efb40f8383cdfd7af3, empty speech
+[2026-01-24 03:14:34,594][root][INFO] - decoding, utt: fff0b957f8d83ddb4814874fce41720b9ec0443edd26c14954e0437fa59f46d1, empty speech
+[2026-01-24 03:14:49,809][root][INFO] - decoding, utt: fff0e0523f123716bd77739c9ec30b16c37fd2e1f885be99da75c94fee72b86e, empty speech
+[2026-01-24 03:14:55,470][root][INFO] - decoding, utt: fff10b29b19752228f4f34a5de65c22b278e7790bfbb288bd36f9036bbe54ff6, empty speech
+[2026-01-24 03:17:56,308][root][INFO] - decoding, utt: fff3787de1a995b6485ee484e75de53a892b61483eb6025d897a0478f8fbc20c, empty speech
+[2026-01-24 03:18:04,315][root][INFO] - decoding, utt: fff3a9be2828ba06296f80ce965a430e418942037f40330b51a22eba883d0795, empty speech
+[2026-01-24 03:18:05,615][root][INFO] - decoding, utt: fff3afd81ed1ac78dfaa0ac60800a033eab4e9b26470a2b4442526ffb62628db, empty speech
+[2026-01-24 03:19:25,974][root][INFO] - decoding, utt: fff4d9d86e1018aab39dd54ee2b0d379d7b5492a6ef469d3638452ed40ba7eb0, empty speech
+[2026-01-24 03:19:26,135][root][INFO] - decoding, utt: fff4de8933d2d6bc66a66a41f2f2b106cfe73c97652d6dd6a73cea0b57bc4769, empty speech
+[2026-01-24 03:19:26,248][root][INFO] - decoding, utt: fff4e7cad74f55981cd0ac3ca3891782f3ef88b2325178ec25c033e3de38a68a, empty speech
+[2026-01-24 03:19:46,666][root][INFO] - decoding, utt: fff5636126cd67568de534832153abcd3a07b9caffa252f6a906f4379b781cf1, empty speech
+[2026-01-24 03:20:19,194][root][INFO] - decoding, utt: fff614e2511d345ad8b656917d84cd21992b7b6d705e17b568f9d6a8fbab9cd4, empty speech
+[2026-01-24 03:20:22,682][root][INFO] - decoding, utt: fff639aeac82e17411868eb9f8a6924978271056ad5a15303b956aae7acc4945, empty speech
+[2026-01-24 03:20:22,772][root][INFO] - decoding, utt: fff63f19ead67511ab345164af7c6385479809cd1b69ee1808e3d10692963a0f, empty speech
+[2026-01-24 03:21:11,745][root][INFO] - decoding, utt: fff6f43b025787c3dbe496c926ce93e50b9ea65a2f3ec9cd91166aecc41d75f0, empty speech
+[2026-01-24 03:21:19,075][root][INFO] - decoding, utt: fff70f971fefbfecbe0021443ebf50dbe8c38c018f037af32f8c9154c032aea2, empty speech
+[2026-01-24 03:21:42,964][root][INFO] - decoding, utt: fff7a23bc38bf319c192e798a2162d620b807b43c4edb1891f1bd8590e6f777f, empty speech
+[2026-01-24 03:22:54,255][root][INFO] - decoding, utt: fff8e2a9c951eb2cfc7658bc9f8057a27570f8589357fd98d9c3af81836b47c7, empty speech
+[2026-01-24 03:23:01,480][root][INFO] - decoding, utt: fff90348e4cf1c5ffa2eaab96d6209bdee68bdf4128a42d0f48da9f51f669795, empty speech
+[2026-01-24 03:23:29,872][root][INFO] - decoding, utt: fff99b6e608f03ad45b345d7a8604bae9c17d6fd303f46691fc1ac6c4649f2e9, empty speech
+[2026-01-24 03:24:18,525][root][INFO] - decoding, utt: fffa96c33f3fc21d5628a6dcb31baafa300363721d44164901130fd04b62adcb, empty speech
+[2026-01-24 03:24:38,235][root][INFO] - decoding, utt: fffae45087bfb7009726d27928847de431124972ecd0946a21abf71d6c7b4c77, empty speech
+[2026-01-24 03:24:54,317][root][INFO] - decoding, utt: fffb192a08b529b55bb5963a3545edea8c44d03c83d3da6e1cf5ec7fd23e92e8, empty speech
+[2026-01-24 03:25:41,348][root][INFO] - decoding, utt: fffbea224263ebc34b0b61445f2572c18f241de326353b4500aeb4b536d3455a, empty speech
+[2026-01-24 03:25:41,461][root][INFO] - decoding, utt: fffbea2cebb5f0cdee4e8927f505085f21a6e0444f020b237bd99405f000609d, empty speech
+[2026-01-24 03:25:46,798][root][INFO] - decoding, utt: fffc0c661a5c718bb5e5e105e04474409adb3d1c5b8bdb746865a9db084a8887, empty speech
+[2026-01-24 03:25:52,368][root][INFO] - decoding, utt: fffc20048713e03b8b557a29b3798d84dcbb233ded2ec86e51c1abceda736ad1, empty speech
+[2026-01-24 03:26:34,442][root][INFO] - decoding, utt: fffcaf1b66ea24f58d54e889f87f6c7f836185a500c11ddd803e3cbe9dce0b8c, empty speech
+[2026-01-24 03:26:42,336][root][INFO] - decoding, utt: fffce640f7eb3eb1f9c250962df49fbc6d4670736815695eb604cb729b6a796a, empty speech
+[2026-01-24 03:27:11,620][root][INFO] - decoding, utt: fffd43b661c750f1d501decab4508c1522fbf42d65928c2bfb739b0457bcd7ee, empty speech
+[2026-01-24 03:28:18,488][root][INFO] - decoding, utt: fffe61125ee3f9b71cdacf991bf8afdf154872e2fa6928fe7133ab299dd09332, empty speech
+[2026-01-24 03:28:43,659][root][INFO] - decoding, utt: fffec9f6c0888d9e221f113eaedc905f5232d8e80297d95389392b8b2a8efecd, empty speech
+[2026-01-24 03:28:45,086][root][INFO] - decoding, utt: fffeda5bf39302887a266dfa772a174123b9ceaf47b76d61a20fc8d334f9b651, empty speech
+[2026-01-24 03:29:23,778][root][INFO] - decoding, utt: ffff66d8ec9e0b1b75ea29c5354299f9720eb7bb01d7d9381fe85439a12265f1, empty speech
+[2026-01-24 03:29:28,467][root][INFO] - decoding, utt: ffff9d9421e8a6c27ef9fbc5172c153d79f766eb2dff99ab0c7a4b63a90bb31a, empty speech

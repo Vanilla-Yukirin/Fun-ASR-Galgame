@@ -1,0 +1,5 @@
+[2026-01-24 03:31:54,741][root][INFO] - download models from model hub: ms
+[2026-01-24 03:31:54,786][root][WARNING] - trust_remote_code: True
+[2026-01-24 03:32:15,902][root][INFO] - rank: 0, model is builded.
+[2026-01-24 03:32:15,904][root][INFO] - Loading pretrained params from /mnt/d/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/outputs-10000/model.pt
+[2026-01-24 03:32:15,915][root][INFO] - ckpt: /mnt/d/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/outputs-10000/model.pt

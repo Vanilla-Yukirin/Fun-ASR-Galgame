@@ -1,0 +1,9 @@
+scp_file: /mnt/d/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/tail1000.scp
+output_file: /mnt/d/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/outputs-7000/outputs-7000_decode.txt
+device: cuda
+ngpu: 1
+gpuid_list:
+- 0
+init_param: /mnt/d/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/outputs-7000/model.pt
+config: /mnt/d/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/outputs-7000/config.yaml
+prompt: 语音转写成日文：
