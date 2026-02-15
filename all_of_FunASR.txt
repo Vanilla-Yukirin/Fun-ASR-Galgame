@@ -321,3 +321,13 @@ python tools/eval_model.py --model_dir /mnt/d/ML/datasets--litagin--Galgame_Spee
 # 下载数据集到D:\ML\Reazon
 python tools/download_reazonspeech.py --output_dir "/mnt/d/ML/Reazon" --subset small --agree_terms --trust_remote_code
 rsync -avP -e "ssh -p 39898" /mnt/d/ML/Reazon/small.zip root@connect.westc.gpuhub.com:/root/autodl-fs/
+
+
+
+---
+
+准备第三个epoch相关内容
+
+# 下载medium数据集到D:\ML\Reazon
+python tools/download_reazonspeech.py --output_dir "/mnt/d/ML/Reazon" --subset medium --agree_terms --trust_remote_code
+rsync -avP -e "ssh -p 39898" /mnt/d/ML/Reazon/medium.zip root@connect.westc.gpuhub.com:/root/autodl-fs/
