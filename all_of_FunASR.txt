@@ -330,4 +330,14 @@ rsync -avP -e "ssh -p 39898" /mnt/d/ML/Reazon/small.zip root@connect.westc.gpuhu
 
 # 下载medium数据集到D:\ML\Reazon
 python tools/download_reazonspeech.py --output_dir "/mnt/d/ML/Reazon" --subset medium --agree_terms --trust_remote_code
+# 空间不够？临时修改缓存位置
+mkdir -p /mnt/d/ML/cache/huggingface
+mkdir -p /mnt/d/ML/cache/modelscope
+mkdir -p /mnt/d/ML/cache/tmp
+export HF_HOME="/mnt/d/ML/cache/huggingface"
+export MODELSCOPE_CACHE="/mnt/d/ML/cache/modelscope"
+export TMPDIR="/mnt/d/ML/cache/tmp"
+# 将旧路径的 token 拷贝到新路径
+cp /home/vanilla0302/.cache/huggingface/token /mnt/d/ML/cache/huggingface/token
+
 rsync -avP -e "ssh -p 39898" /mnt/d/ML/Reazon/medium.zip root@connect.westc.gpuhub.com:/root/autodl-fs/
