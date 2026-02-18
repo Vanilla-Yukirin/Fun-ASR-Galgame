@@ -538,3 +538,29 @@ bash tools/ReazonMedium/check_small_train.sh
 [MEDIUM base] 619136
 [OVERLAP]    56405
 结果发现：是的。small-train里面的音频全部都出现在了medium里面。那么生成medium-val的时候，需要小心谨慎。
+
+# 写一个新脚本，用于划分数据集，生成txt和scp（分出val）
+python tools/ReazonMedium/rebase_manifests.py \
+  --audio-dir /root/autodl-tmp/ML/Reazon/medium/train/audio \
+  --transcript /root/autodl-tmp/ML/Reazon/medium/train/manifests/train.txt \
+  --output-train-scp /root/autodl-tmp/ML/Reazon/medium/train/manifests/train_medium_train.scp \
+  --output-train-text /root/autodl-tmp/ML/Reazon/medium/train/manifests/train_medium_train.txt \
+  --output-val-scp /root/autodl-tmp/ML/Reazon/medium/train/manifests/val_medium_2000.scp \
+  --output-val-text /root/autodl-tmp/ML/Reazon/medium/train/manifests/val_medium_2000.txt \
+  --ext .flac \
+  --skip-missing \
+  --val-size 2000 \
+  --seed 42 \
+  --avoid-val-list /root/autodl-tmp/ML/Reazon/small/train/manifests/train_reazon_temp.txt
+# 输出结果：
+Processed transcript: 619136 entries
+Valid (audio exists): 619136
+Avoid list size: 56405
+Val candidates after avoid filter: 562731
+Val selected: 2000
+Train selected: 617136
+TRAIN SCP : /root/autodl-tmp/ML/Reazon/medium/train/manifests/train_medium_train.scp
+TRAIN TEXT: /root/autodl-tmp/ML/Reazon/medium/train/manifests/train_medium_train.txt
+VAL SCP   : /root/autodl-tmp/ML/Reazon/medium/train/manifests/val_medium_2000.scp
+VAL TEXT  : /root/autodl-tmp/ML/Reazon/medium/train/manifests/val_medium_2000.txt
+
