@@ -580,21 +580,25 @@ comm -12 /tmp/avoid.base /tmp/val.base | wc -l
 需要合并的两个TEXT
 /root/autodl-tmp/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/train_text_0_3746131.txt
 /root/autodl-tmp/ML/Reazon/medium/train/manifests/train_medium_train.txt
+/root/autodl-tmp/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/long_tail.txt
 以及两个SCP
 /root/autodl-tmp/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/train_wav_0_3746131.scp
 /root/autodl-tmp/ML/Reazon/medium/train/manifests/train_medium_train.scp
+/root/autodl-tmp/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/long_tail.scp
 python tools/mix_manifests.py \
   --text-files \
     /root/autodl-tmp/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/train_text_0_3746131.txt \
     /root/autodl-tmp/ML/Reazon/medium/train/manifests/train_medium_train.txt \
+    /root/autodl-tmp/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/long_tail.txt \
   --scp-files \
     /root/autodl-tmp/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/train_wav_0_3746131.scp \
     /root/autodl-tmp/ML/Reazon/medium/train/manifests/train_medium_train.scp \
+    /root/autodl-tmp/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/long_tail.scp \
   --output-text /root/autodl-tmp/ML/mixed-medium/train_mixed_medium.txt \
   --output-scp  /root/autodl-tmp/ML/mixed-medium/train_mixed_medium.scp \
   --seed 42
 
-Mixed 3988653 entries from 2 pairs
+Mixed 4419115 entries from 3 pairs
 Text -> /root/autodl-tmp/ML/mixed-medium/train_mixed_medium.txt
 SCP  -> /root/autodl-tmp/ML/mixed-medium/train_mixed_medium.scp
 
@@ -620,3 +624,10 @@ cat /root/autodl-tmp/ML/mixed1/val_galgame_tail.scp \
 
 # 构建jsonl
 python tools/scp2jsonl.py "++scp_file=/root/autodl-tmp/ML/mixed-medium/val_mixed_medium_5k.scp" "++transcript_file=/root/autodl-tmp/ML/mixed-medium/val_mixed_medium_5k.txt" "++jsonl_file=/root/autodl-tmp/ML/mixed-medium/val_mixed_medium_5k.jsonl" "++prompt='语音转写成日文：'"
+
+# 不需要复制权重，修改了微调脚本就行
+# cp /root/autodl-tmp/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/outputs /root/autodl-tmp/ML/mixed1/ -r
+
+# 开训
+
+bash finetune_autodl_2epoch.sh
