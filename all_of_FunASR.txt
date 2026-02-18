@@ -514,3 +514,27 @@ python tools/eval_model.py --model_dir /root/autodl-tmp/ML/datasets--litagin--Ga
 python tools/eval_model.py --model_dir /root/autodl-tmp/ML/mixed1/outputs --output_name outputs_2epoch_avg5_tail1000 --prompt "语音转写成日文：" --scp_file /root/autodl-tmp/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/tail1000.scp --ref_norm_text /root/autodl-tmp/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/tail1000_norm.txt
 # model.pt.avg5 in 5k
 # 自己去重命名一下
+
+
+
+
+
+
+
+
+---
+
+
+# 添加Reazon-medium数据集
+unzip -q /root/autodl-fs/medium.zip -d /root/autodl-tmp/ML/Reazon/
+# 由于打包方式有差异，所以需要检查一下解压的嵌套文件夹是否正常。建议与small对齐：
+- # /root/autodl-tmp/ML/Reazon/medium/train/audio
+- # /root/autodl-tmp/ML/Reazon/medium/train/manifests
+# 我这次是导致嵌套了，所以我：mv ML/Reazon/Reazon/medium ML/Reazon/
+
+# 检查是否small的train里面的音频出现在了medium里面
+bash tools/ReazonMedium/check_small_train.sh
+[SMALL base] 56405
+[MEDIUM base] 619136
+[OVERLAP]    56405
+结果发现：是的。small-train里面的音频全部都出现在了medium里面。那么生成medium-val的时候，需要小心谨慎。
