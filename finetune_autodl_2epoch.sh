@@ -95,12 +95,12 @@ torchrun $DISTRIBUTED_ARGS \
 ++device="cuda" \
 ++output_dir="${output_dir}" 2>&1 | tee "${log_file}"
 
-# tensorboard --logdir /root/autodl-tmp/ML/mixed1/outputs/tensorboard
+# tensorboard --logdir /root/autodl-tmp/ML/mixed-medium/outputs/tensorboard
 
 # 首先结束默认启动的TensorBoard进程，执行命令：ps -ef | grep tensorboard | awk '{print $2}' | xargs kill -9 
 # 在终端中执行以下命令启动TensorBoard
 # tensorboard --port 6007 --logdir /path/to/your/tf-logs/direction
-# tensorboard --port 6007 --logdir /root/autodl-tmp/ML/mixed1/outputs/tensorboard
+# tensorboard --port 6007 --logdir /root/autodl-tmp/ML/mixed-medium/outputs/tensorboard
 
 # 如果遇到：RuntimeError: operator torchvision::nms does not exist
 # pip list | grep torch
