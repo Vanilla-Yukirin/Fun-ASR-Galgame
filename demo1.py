@@ -23,11 +23,16 @@ def main():
     )
 
     wav_path = f"{model.model_path}/example/zh.mp3"
+    llm_kwargs = {
+        "repetition_penalty": 1.6,
+        "no_repeat_ngram_size": 3,
+    }
     res = model.generate(
         input=[wav_path],
         cache={},
         batch_size=1,
         hotwords=["开放时间"],
+        llm_kwargs=llm_kwargs,
         # 中文、英文、日文 for Fun-ASR-Nano-2512
         # 中文、英文、粤语、日文、韩文、越南语、印尼语、泰语、马来语、菲律宾语、阿拉伯语、
         # 印地语、保加利亚语、克罗地亚语、捷克语、丹麦语、荷兰语、爱沙尼亚语、芬兰语、希腊语、
@@ -47,7 +52,7 @@ def main():
         remote_code="./model.py",
         device=device,
     )
-    res = model.generate(input=[wav_path], cache={}, batch_size=1)
+    res = model.generate(input=[wav_path], cache={}, batch_size=1, llm_kwargs=llm_kwargs)
     text = res[0]["text"]
     print(text)
 
