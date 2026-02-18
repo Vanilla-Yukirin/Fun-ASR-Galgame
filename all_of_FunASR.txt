@@ -564,3 +564,36 @@ TRAIN TEXT: /root/autodl-tmp/ML/Reazon/medium/train/manifests/train_medium_train
 VAL SCP   : /root/autodl-tmp/ML/Reazon/medium/train/manifests/val_medium_2000.scp
 VAL TEXT  : /root/autodl-tmp/ML/Reazon/medium/train/manifests/val_medium_2000.txt
 
+# 校验确保medium的val中没有出现过
+# 1) 验证 val 与 avoid 列表（small train）按 utt_id 交集应为 0
+awk '{print $1}' /root/autodl-tmp/ML/Reazon/small/train/manifests/train_reazon_temp.txt | sort -u > /tmp/avoid.utt
+awk '{print $1}' /root/autodl-tmp/ML/Reazon/medium/train/manifests/val_medium_2000.txt | sort -u > /tmp/val.utt
+comm -12 /tmp/avoid.utt /tmp/val.utt | wc -l
+# 2) 再按音频 basename 交集校验（更稳），也应为 0
+awk '{n=split($2,a,"/"); f=a[n]; sub(/\.[^.]+$/, "", f); print f}' /root/autodl-tmp/ML/Reazon/small/train/manifests/train_reazon_temp.scp | sort -u > /tmp/avoid.base
+awk '{n=split($2,a,"/"); f=a[n]; sub(/\.[^.]+$/, "", f); print f}' /root/autodl-tmp/ML/Reazon/medium/train/manifests/val_medium_2000.scp | sort -u > /tmp/val.base
+comm -12 /tmp/avoid.base /tmp/val.base | wc -l
+
+# 构建mixed-medium混合集
+
+# 合并2个train
+需要合并的两个TEXT
+/root/autodl-tmp/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/train_text_0_3746131.txt
+/root/autodl-tmp/ML/Reazon/medium/train/manifests/train_medium_train.txt
+以及两个SCP
+/root/autodl-tmp/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/train_wav_0_3746131.scp
+/root/autodl-tmp/ML/Reazon/medium/train/manifests/train_medium_train.scp
+python tools/mix_manifests.py \
+  --text-files \
+    /root/autodl-tmp/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/train_text_0_3746131.txt \
+    /root/autodl-tmp/ML/Reazon/medium/train/manifests/train_medium_train.txt \
+  --scp-files \
+    /root/autodl-tmp/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/train_wav_0_3746131.scp \
+    /root/autodl-tmp/ML/Reazon/medium/train/manifests/train_medium_train.scp \
+  --output-text /root/autodl-tmp/ML/mixed-medium/train_mixed-medium.txt \
+  --output-scp  /root/autodl-tmp/ML/mixed-medium/train_mixed-medium.scp \
+  --seed 42
+
+Mixed 3988653 entries from 2 pairs
+Text -> /root/autodl-tmp/ML/mixed-medium/train_mixed-medium.txt
+SCP  -> /root/autodl-tmp/ML/mixed-medium/train_mixed-medium.scp
