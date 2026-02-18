@@ -326,6 +326,18 @@ rsync -avP -e "ssh -p 39898" /mnt/d/ML/Reazon/small.zip root@connect.westc.gpuhu
 
 ---
 
+
+# 保存2Epoch的训练数据
+# small数据集的划分过程：autodl-tmp/ML/Reazon/small/train/manifests
+rsync -avP -e "ssh -p 39898" root@connect.westc.gpuhub.com:/root/autodl-tmp/ML/Reazon/small/train/manifests /mnt/d/ML/FunASR-Galgame-Train/small-manifests
+# 保存2Epoch训练结果
+rsync -avP -e "ssh -p 39898" root@connect.westc.gpuhub.com:/root/autodl-tmp/ML/mixed1 /mnt/d/ML/FunASR-Galgame-Train/2epoch-model
+# 保存1Epoch的训练结果
+rsync -avP --exclude='data' -e "ssh -p 39898" root@connect.westc.gpuhub.com:/root/autodl-tmp/ML/datasets--litagin--Galgame_Speech_ASR_16kHz /mnt/d/ML/FunASR-Galgame-Train/1epoch-model
+
+
+---
+
 准备第三个epoch相关内容
 
 # 下载medium数据集到D:\ML\Reazon
