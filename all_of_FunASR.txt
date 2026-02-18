@@ -598,4 +598,25 @@ Mixed 3988653 entries from 2 pairs
 Text -> /root/autodl-tmp/ML/mixed-medium/train_mixed_medium.txt
 SCP  -> /root/autodl-tmp/ML/mixed-medium/train_mixed_medium.scp
 
+# 构建jsonl
+python tools/scp2jsonl.py "++scp_file=/root/autodl-tmp/ML/mixed-medium/train_mixed_medium.scp" "++transcript_file=/root/autodl-tmp/ML/mixed-medium/train_mixed_medium.txt" "++jsonl_file=/root/autodl-tmp/ML/mixed-medium/train_mixed_medium.jsonl" "++prompt='语音转写成日文：'"
 
+
+# 合并val
+# 需要使用2个val进行合并
+# 一个是galgame数据集的，这部分与mixed1中保持一样
+/root/autodl-tmp/ML/mixed1/val_galgame_tail.txt
+/root/autodl-tmp/ML/mixed1/val_galgame_tail.scp
+# 一个是medium的2000
+/root/autodl-tmp/ML/Reazon/medium/train/manifests/val_medium_2000.scp
+/root/autodl-tmp/ML/Reazon/medium/train/manifests/val_medium_2000.txt
+# 开始合并（不需要打乱）
+cat /root/autodl-tmp/ML/mixed1/val_galgame_tail.txt \
+    /root/autodl-tmp/ML/Reazon/medium/train/manifests/val_medium_2000.txt \
+    > /root/autodl-tmp/ML/mixed-medium/val_mixed_medium_5k.txt
+cat /root/autodl-tmp/ML/mixed1/val_galgame_tail.scp \
+    /root/autodl-tmp/ML/Reazon/medium/train/manifests/val_medium_2000.scp \
+    > /root/autodl-tmp/ML/mixed-medium/val_mixed_medium_5k.scp
+
+# 构建jsonl
+python tools/scp2jsonl.py "++scp_file=/root/autodl-tmp/ML/mixed-medium/val_mixed_medium_5k.scp" "++transcript_file=/root/autodl-tmp/ML/mixed-medium/val_mixed_medium_5k.txt" "++jsonl_file=/root/autodl-tmp/ML/mixed-medium/val_mixed_medium_5k.jsonl" "++prompt='语音转写成日文：'"
