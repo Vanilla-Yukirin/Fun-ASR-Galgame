@@ -590,10 +590,12 @@ python tools/mix_manifests.py \
   --scp-files \
     /root/autodl-tmp/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/train_wav_0_3746131.scp \
     /root/autodl-tmp/ML/Reazon/medium/train/manifests/train_medium_train.scp \
-  --output-text /root/autodl-tmp/ML/mixed-medium/train_mixed-medium.txt \
-  --output-scp  /root/autodl-tmp/ML/mixed-medium/train_mixed-medium.scp \
+  --output-text /root/autodl-tmp/ML/mixed-medium/train_mixed_medium.txt \
+  --output-scp  /root/autodl-tmp/ML/mixed-medium/train_mixed_medium.scp \
   --seed 42
 
 Mixed 3988653 entries from 2 pairs
-Text -> /root/autodl-tmp/ML/mixed-medium/train_mixed-medium.txt
-SCP  -> /root/autodl-tmp/ML/mixed-medium/train_mixed-medium.scp
+Text -> /root/autodl-tmp/ML/mixed-medium/train_mixed_medium.txt
+SCP  -> /root/autodl-tmp/ML/mixed-medium/train_mixed_medium.scp
+
+
