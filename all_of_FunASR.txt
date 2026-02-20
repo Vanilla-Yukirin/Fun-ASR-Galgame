@@ -353,3 +353,9 @@ export TMPDIR="/mnt/d/ML/cache/tmp"
 cp /home/vanilla0302/.cache/huggingface/token /mnt/d/ML/cache/huggingface/token
 
 rsync -avP -e "ssh -p 39898" /mnt/d/ML/Reazon/medium.zip root@connect.westc.gpuhub.com:/root/autodl-fs/
+
+
+---
+
+# 测试脚本demo.py
+python demo.py --model_dir /mnt/d/ML/vGPU/outputs-1Epoch/ --audio_file /mnt/d/ML/test/02a5601c02e4aa8f42c0e21549424d7eeb9f872f6fcf9091b3f5faa0d7a3246d.ogg
