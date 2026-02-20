@@ -359,3 +359,11 @@ rsync -avP -e "ssh -p 39898" /mnt/d/ML/Reazon/medium.zip root@connect.westc.gpuh
 
 # 测试脚本demo.py
 python demo.py --model_dir /mnt/d/ML/vGPU/outputs-1Epoch/ --audio_file /mnt/d/ML/test/02a5601c02e4aa8f42c0e21549424d7eeb9f872f6fcf9091b3f5faa0d7a3246d.ogg
+
+
+
+
+---
+
+# 保存2Epoch训练结果
+rsync -avP -e "ssh -p 39898" root@connect.westc.gpuhub.com:/root/autodl-tmp/ML/mixed-medium /mnt/d/ML/FunASR-Galgame-Train/3epoch-model
