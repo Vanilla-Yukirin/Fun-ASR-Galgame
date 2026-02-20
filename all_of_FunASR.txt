@@ -631,3 +631,39 @@ python tools/scp2jsonl.py "++scp_file=/root/autodl-tmp/ML/mixed-medium/val_mixed
 # 开训
 
 bash finetune_autodl_2epoch.sh
+
+
+
+## 模型验证
+
+# 先对val做好归一化
+python tools/whisper_mix_normalize.py /root/autodl-tmp/ML/mixed-medium/val_mixed_medium_5k.txt /root/autodl-tmp/ML/mixed-medium/val_mixed_medium_5k_norm.txt
+
+# 使用eval_model.py进行一口气的“解码decode+归一化norm+”
+
+示例：
+
+python tools/eval_model.py \
+  --model_dir default \
+  --output_name pretrained_prompt \
+  --prompt "语音转写成日文：" \
+  --scp_file /root/autodl-tmp/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/tail1000.scp \
+  --ref_norm_text /root/autodl-tmp/ML/mixed1/val_mixed1_5k_norm.txt
+
+一行：
+
+# 默认官模
+python tools/eval_model.py --model_dir default --output_name pretrained_val_mixed_medium_5k --prompt "语音转写成日文：" --scp_file /root/autodl-tmp/ML/mixed-medium/val_mixed_medium_5k.scp --ref_norm_text /root/autodl-tmp/ML/mixed-medium/val_mixed_medium_5k_norm.txt && echo -e "\n我是FunASR-nano"
+# model.pt in val5k
+python tools/eval_model.py --model_dir /root/autodl-tmp/ML/mixed-medium/outputs --output_name outputs_3epoch_end_val_mixed_medium_5k --prompt "语音转写成日文：" --scp_file /root/autodl-tmp/ML/mixed-medium/val_mixed_medium_5k.scp --ref_norm_text /root/autodl-tmp/ML/mixed-medium/val_mixed_medium_5k_norm.txt && echo -e "\n我是outputs_3epoch_end_val_mixed_medium_5k"
+# 1epoch in val5k
+python tools/eval_model.py --model_dir /root/autodl-tmp/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/outputs --output_name outputs_1epoch_end_val_mixed_medium_5k --prompt "语音转写成日文：" --scp_file /root/autodl-tmp/ML/mixed-medium/val_mixed_medium_5k.scp --ref_norm_text /root/autodl-tmp/ML/mixed-medium/val_mixed_medium_5k_norm.txt && echo -e "\n我是outputs_1epoch_end_val_mixed_medium_5k"
+# 2epoch in val5k
+python tools/eval_model.py --model_dir /root/autodl-tmp/ML/mixed1/outputs --output_name outputs_2epoch_end_val_mixed_medium_5k --prompt "语音转写成日文：" --scp_file /root/autodl-tmp/ML/mixed-medium/val_mixed_medium_5k.scp --ref_norm_text /root/autodl-tmp/ML/mixed-medium/val_mixed_medium_5k_norm.txt && echo -e "\n我是outputs_2epoch_end_val_mixed_medium_5k"
+# model.pt in tail1000
+python tools/eval_model.py --model_dir /root/autodl-tmp/ML/mixed-medium/outputs --output_name outputs_3epoch_tail1000 --prompt "语音转写成日文：" --scp_file /root/autodl-tmp/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/tail1000.scp --ref_norm_text /root/autodl-tmp/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/tail1000_norm.txt && echo -e "\n我是outputs_3epoch_tail1000"
+
+
+# 开启kana再次验证
+
+python tools/whisper_mix_normalize.py /root/autodl-tmp/ML/mixed-medium/val_mixed_medium_5k.txt /root/autodl-tmp/ML/mixed-medium/val_mixed_medium_5k_norm_kana.txt true
