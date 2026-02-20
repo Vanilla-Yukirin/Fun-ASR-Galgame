@@ -41,6 +41,7 @@ def main():
                         help="Path to the normalized reference text file")
     parser.add_argument("--prompt", type=str, default="", help="Prompt for decoding (e.g., '语音转写成日文：')")
     parser.add_argument("--yes", action="store_true", help="Automatically say yes to skip prompts if files exist")
+    parser.add_argument("--kana", action="store_true", help="Enable kana normalization mode (pass trailing 'true' to whisper_mix_normalize.py)")
 
     args = parser.parse_args()
 
@@ -92,6 +93,8 @@ def main():
     if not ask_skip(norm_out, "Step 2: Normalizing"):
         print("Step 2: Normalizing...")
         norm_cmd = ["python", "tools/whisper_mix_normalize.py", decode_out, norm_out]
+        if args.kana:
+            norm_cmd.append("true")
         run_command(norm_cmd)
     
     # 3. Computing WER/CER
