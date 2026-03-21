@@ -351,6 +351,7 @@ export MODELSCOPE_CACHE="/mnt/d/ML/cache/modelscope"
 export TMPDIR="/mnt/d/ML/cache/tmp"
 # 将旧路径的 token 拷贝到新路径
 cp /home/vanilla0302/.cache/huggingface/token /mnt/d/ML/cache/huggingface/token
+# 注意推荐 python -m pip install -U "datasets==2.19.2" "huggingface_hub==0.36.0"
 
 rsync -avP -e "ssh -p 39898" /mnt/d/ML/Reazon/medium.zip root@connect.westc.gpuhub.com:/root/autodl-fs/
 
