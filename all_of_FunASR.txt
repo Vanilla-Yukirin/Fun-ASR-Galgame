@@ -353,6 +353,19 @@ export TMPDIR="/mnt/d/ML/cache/tmp"
 cp /home/vanilla0302/.cache/huggingface/token /mnt/d/ML/cache/huggingface/token
 # 注意推荐 python -m pip install -U "datasets==2.19.2" "huggingface_hub==0.36.0"
 
+# win11 pwsh下载
+$env:HF_HOME="D:\ML\cache\huggingface"
+$env:HF_DATASETS_CACHE="D:\ML\
+
+\huggingface\datasets"
+$env:HUGGINGFACE_HUB_CACHE="D:\ML\cache\huggingface\hub"
+$env:MODELSCOPE_CACHE="D:\ML\cache\modelscope"
+$env:TEMP="D:\ML\cache\tmp"
+$env:TMP="D:\ML\cache\tmp"
+New-Item -ItemType Directory -Force -Path $env:HF_HOME,$env:HF_DATASETS_CACHE,$env:HUGGINGFACE_HUB_CACHE,$env:MODELSCOPE_CACHE,$env:TEMP | Out-Null
+python tools\download_reazonspeech.py --output_dir "D:\ML\Reazon" --subset medium --agree_terms --trust_remote_code
+
+# 传输
 rsync -avP -e "ssh -p 39898" /mnt/d/ML/Reazon/medium.zip root@connect.westc.gpuhub.com:/root/autodl-fs/
 
 
