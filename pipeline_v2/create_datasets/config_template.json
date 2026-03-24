@@ -1,0 +1,82 @@
+{
+  "_comment": "这是 create_datasets 流水线的模板配置，请复制后按实际路径修改。",
+  "db": {
+    "path": "pipline_v2/create_datasets/workspace/create_datasets.sqlite"
+  },
+  "datasets": [
+    {
+      "dataset_id": "galgame",
+      "scp_file": "/mnt/d/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/train_wav_0_3746131.scp",
+      "text_file": "/mnt/d/ML/datasets--litagin--Galgame_Speech_ASR_16kHz/train_text_0_3746131.txt",
+      "source_prefix": "/mnt/d/ML/datasets--litagin--Galgame_Speech_ASR_16kHz"
+    }
+  ],
+  "ingest": {
+    "batch_size": 5000
+  },
+  "tokenize": {
+    "batch_size": 5000
+  },
+  "stage1": {
+    "min_df": 5,
+    "max_df_ratio": 0.2,
+    "min_idf": 0.0,
+    "min_token_len": 2,
+    "batch_size": 5000,
+    "plot": true,
+    "plot_path": "pipline_v2/create_datasets/workspace/stage1_idf_hist.png"
+  },
+  "llm": {
+    "backend": "heuristic",
+    "model": "",
+    "endpoint": "",
+    "api_key_env": "OPENAI_API_KEY",
+    "temperature": 0,
+    "top_p": 1,
+    "timeout": 60,
+    "batch_size": 1000
+  },
+  "stage3": {
+    "max_hotwords_per_utt": 20,
+    "batch_size": 5000
+  },
+  "split": {
+    "eval_ratio": 0.05,
+    "eval_fast_size": 5000,
+    "seed_split": "split_v1",
+    "seed_fast": "fast_v1",
+    "batch_size": 10000
+  },
+  "inject": {
+    "train_hotword_ratio": 0.3,
+    "seed_inject": "inject_v1"
+  },
+  "distractor": {
+    "random_ratio": 0.5,
+    "phonetic_ratio": 0.5,
+    "max_hotwords_per_sample": 6,
+    "max_distractors_per_sample": 6,
+    "phonetic_top_k": 20,
+    "seed_random": "random_distractor_v1",
+    "seed_phonetic": "phonetic_distractor_v1",
+    "seed_context_order": "context_order_v1"
+  },
+  "prompt": {
+    "system": "You are a helpful assistant.",
+    "base": "语音转写成日文：",
+    "with_context_template": "请结合上下文词表进行转写。\\n词表：{context_words}\\n语音转写成日文："
+  },
+  "export": {
+    "output_dir": "pipline_v2/create_datasets/workspace/exports",
+    "profile": "wsl",
+    "eval_use_hotwords": false,
+    "path_prefix": {
+      "wsl": {
+        "galgame": "/mnt/d/ML/datasets--litagin--Galgame_Speech_ASR_16kHz"
+      },
+      "autodl": {
+        "galgame": "/root/autodl-tmp/ML/datasets--litagin--Galgame_Speech_ASR_16kHz"
+      }
+    }
+  }
+}
